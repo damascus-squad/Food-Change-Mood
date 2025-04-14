@@ -32,7 +32,7 @@ tasks.register("prepareAssets") {
     }
 }
 
-tasks.named("build") {
+tasks.named("compileKotlin") {
     dependsOn(downloadFoodCSV)
 }
 
