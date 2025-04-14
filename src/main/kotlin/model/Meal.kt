@@ -4,7 +4,7 @@ import model.Nutrition
 
 data class Meal(
     val name: String,
-    val id: String,
+    val id: Int?,
     val minutes: Int?,
     val contributorId: Int?,
     val submitted: String,
