@@ -14,20 +14,4 @@ object FoodColumnIndex {
     const val INGREDIENTS = 10
     const val N_INGREDIENTS = 11
 
-    fun getOrderedValues(map: Map<String, String>): List<String> {
-        return listOf(
-            map["name"] ?: "",
-            map["id"] ?: "0",
-            map["minutes"] ?: "0",
-            map["contributor_id"] ?: "0",
-            map["submitted"] ?: "",
-            map["tags"] ?: "[]",
-            map["nutrition"] ?: "[]",
-            map["n_steps"] ?: "0",
-            map["steps"] ?: "[]",
-            map["description"] ?: "",
-            map["ingredients"] ?: "[]",
-            map["n_ingredients"] ?: "0"
-        )
-    }
 }
