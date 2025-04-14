@@ -1,0 +1,73 @@
+package org.damascus.presentation
+
+
+import org.damascus.logic.GetFirstTenMealsUseCase
+
+class FoodChangeMoodUI(
+    val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+) {
+    private fun getInput() = readLine()?.toIntOrNull()
+
+    fun start(){
+        showMenu(
+            title = "Welcome to our App",
+            options = listOf(
+                "Display first 10 meals",
+                "Get .....",
+                "Get ........"
+            ),
+            actions = listOf(
+                { printFirst10Meals() },
+                {  },
+                {  }
+            )
+        )
+    }
+
+    private fun showMenu(
+        title: String,
+        options: List<String>,
+        actions: List<() -> Unit>
+    ) {
+        println("\n=== $title ===")
+
+        options.forEachIndexed { index, option ->
+            println("${index + 1}- $option")
+        }
+
+        print("Enter your choice: ")
+        val input = getInput()
+
+        if (input == null || input !in 1..options.size) {
+            println("Invalid input. Try again.\n")
+        } else {
+            actions[input - 1]()
+        }
+
+        showMenu(title, options, actions)
+    }
+
+
+    /**
+     * for test first run
+     */
+    fun printFirst10Meals() {
+        getFirstNMealsUseCase.getMeals().forEachIndexed { index, meal ->
+            println(
+                "Meal ${index + 1}: " +
+                        "Name='${meal.name}'\n " +
+                        "ID=${meal.id}\n " +
+                        "Minutes=${meal.minutes}\n " +
+                        "ContributorID=${meal.contributorId}\n " +
+                        "Submitted='${meal.submitted}\n, " +
+                        "Tags=${meal.tags}\n " +
+                        "Nutrition=${meal.nutrition}\n " +
+                        "StepsCount=${meal.nSteps}\n " +
+                        "Steps=${meal.steps}\n " +
+                        "Description='${meal.description.take(30)}...'\n " + // to avoid long prints
+                        "Ingredients=${meal.ingredients}\n " +
+                        "IngredientsCount=${meal.nIngredients}\n\n"
+            )
+        }
+    }
+}
