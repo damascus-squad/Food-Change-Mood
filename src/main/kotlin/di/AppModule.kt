@@ -1,9 +1,9 @@
 package org.damascus.di
 
 
-import data.CsvFileReader
-import data.CsvMealRepository
-import org.damascus.data.CsvParser
+import data.MealFileReader
+import data.MealRepositoryImpl
+import org.damascus.data.MealDataParser
 import org.damascus.data.source.CsvMealDataSource
 import org.damascus.logic.MealRepository
 import org.damascus.presentation.FoodChangeMoodUI
@@ -14,11 +14,11 @@ import java.io.File
 
 val appModule = module {
     single { File(CSV_FILE_PATH) }
-    single { CsvParser() }
-    single { CsvFileReader() }
+    single { MealDataParser() }
+    single { MealFileReader() }
 
     single { CsvMealDataSource(get(), get()) }
-    single<MealRepository> { CsvMealRepository(get()) }
+    single<MealRepository> { MealRepositoryImpl(get()) }
 
     single { FoodChangeMoodUI(get()) }
 }

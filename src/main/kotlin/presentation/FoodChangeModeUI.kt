@@ -4,7 +4,7 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 
 class FoodChangeMoodUI(
-    val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -62,11 +62,11 @@ class FoodChangeMoodUI(
                         "Submitted='${meal.submitted}\n, " +
                         "Tags=${meal.tags}\n " +
                         "Nutrition=${meal.nutrition}\n " +
-                        "StepsCount=${meal.nSteps}\n " +
+                        "StepsCount=${meal.stepsCount}\n " +
                         "Steps=${meal.steps}\n " +
                         "Description='${meal.description.take(30)}...'\n " + // to avoid long prints
                         "Ingredients=${meal.ingredients}\n " +
-                        "IngredientsCount=${meal.nIngredients}\n\n"
+                        "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
         }
     }
