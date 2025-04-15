@@ -6,5 +6,5 @@ import org.damascus.model.Meal
 class GetFirstTenMealsUseCase(
     val mealRepo: MealRepository,
 ) {
-    fun getMeals(): List<Meal> = mealRepo.getAllMeals().take(10)
+    operator fun invoke(): List<Meal> = mealRepo.getAllMeals().take(10)
 }

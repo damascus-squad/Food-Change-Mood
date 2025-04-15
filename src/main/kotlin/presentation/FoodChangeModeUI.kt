@@ -52,7 +52,7 @@ class FoodChangeMoodUI(
      * for test first run
      */
     fun printFirst10Meals() {
-        getFirstNMealsUseCase.getMeals().forEachIndexed { index, meal ->
+        getFirstNMealsUseCase().forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
                         "Name='${meal.name}'\n " +
