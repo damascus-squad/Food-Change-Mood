@@ -8,7 +8,7 @@ class FoodChangeMoodUI(
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
-    fun start(){
+    fun start() {
         showMenu(
             title = "Welcome to our App",
             options = listOf(
@@ -18,8 +18,8 @@ class FoodChangeMoodUI(
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                {  },
-                {  }
+                { },
+                { }
             )
         )
     }
@@ -35,15 +35,16 @@ class FoodChangeMoodUI(
             println("${index + 1}- $option")
         }
 
-        print("Enter your choice: ")
+        print("Enter your choice: (0 to exit): ")
         val input = getInput()
 
-        if (input == null || input !in 1..options.size) {
+        if (input == 0) {
+            return
+        } else if (input == null || input !in 1..options.size) {
             println("Invalid input. Try again.\n")
         } else {
             actions[input - 1]()
         }
-
         showMenu(title, options, actions)
     }
 
