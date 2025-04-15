@@ -1,4 +1,4 @@
-package org.damascus.data
+package org.damascus.data.utils
 
 object FoodColumnIndex {
     const val NAME = 0

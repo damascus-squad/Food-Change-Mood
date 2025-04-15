@@ -1,6 +1,5 @@
 package data
 
-import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import org.damascus.utils.CSV_FILE_PATH
 import java.io.File
 import java.io.IOException

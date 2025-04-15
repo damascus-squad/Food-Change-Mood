@@ -1,6 +1,8 @@
 package org.damascus.data
 
 import model.*
+import org.damascus.data.utils.FoodColumnIndex
+import org.damascus.data.utils.NutritionIndex
 import org.damascus.model.Meal
 
 
