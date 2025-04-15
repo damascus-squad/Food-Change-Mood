@@ -2,9 +2,12 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.model.Meal
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
 
 class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -13,12 +16,12 @@ class FoodChangeMoodUI(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
-                "Get ........"
+                "Identify iraqi meals"
+
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { },
+                { printMealsList(identifyIraqiMealsUseCase.invoke())},
                 { }
             )
         )
@@ -66,6 +69,26 @@ class FoodChangeMoodUI(
                         "StepsCount=${meal.stepsCount}\n " +
                         "Steps=${meal.steps}\n " +
                         "Description='${meal.description.take(30)}...'\n " + // to avoid long prints
+                        "Ingredients=${meal.ingredients}\n " +
+                        "IngredientsCount=${meal.ingredientsCount}\n\n"
+            )
+        }
+    }
+
+    fun printMealsList(mealsList:List<Meal>) {
+        mealsList.forEachIndexed { index, meal ->
+            println(
+                "Meal ${index + 1}: " +
+                        "Name='${meal.name}'\n " +
+                        "ID=${meal.id}\n " +
+                        "Minutes=${meal.minutes}\n " +
+                        "ContributorID=${meal.contributorId}\n " +
+                        "Submitted='${meal.submitted}\n, " +
+                        "Tags=${meal.tags}\n " +
+                        "Nutrition=${meal.nutrition}\n " +
+                        "StepsCount=${meal.stepsCount}\n " +
+                        "Steps=${meal.steps}\n " +
+                        "Description='${meal.description.take(30)}...'\n " +
                         "Ingredients=${meal.ingredients}\n " +
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
