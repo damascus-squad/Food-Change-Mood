@@ -1,23 +1,21 @@
 package org.damascus.presentation
 
 
-import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.useCase.GetEggFreeSweetUseCase
 
 class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase
 ) {
-    private fun getInput() = readLine()?.toIntOrNull()
+    private fun getInput() = readlnOrNull()?.toIntOrNull()
 
     fun start() {
         showMenu(
             title = "Welcome to our App",
             options = listOf(
-                "Display first 10 meals",
-                "Get .....",
-                "Get ........"
+                "Get Egg-Free Sweet",
             ),
             actions = listOf(
-                { printFirst10Meals() },
+                { printEggFreeSweet() },
                 { },
                 { }
             )
@@ -49,26 +47,21 @@ class FoodChangeMoodUI(
     }
 
 
-    /**
-     * for test first run
-     */
-    fun printFirst10Meals() {
-        getFirstNMealsUseCase().forEachIndexed { index, meal ->
-            println(
-                "Meal ${index + 1}: " +
-                        "Name='${meal.name}'\n " +
-                        "ID=${meal.id}\n " +
-                        "Minutes=${meal.minutes}\n " +
-                        "ContributorID=${meal.contributorId}\n " +
-                        "Submitted='${meal.submitted}\n, " +
-                        "Tags=${meal.tags}\n " +
-                        "Nutrition=${meal.nutrition}\n " +
-                        "StepsCount=${meal.stepsCount}\n " +
-                        "Steps=${meal.steps}\n " +
-                        "Description='${meal.description.take(30)}...'\n " + // to avoid long prints
-                        "Ingredients=${meal.ingredients}\n " +
-                        "IngredientsCount=${meal.ingredientsCount}\n\n"
-            )
+    private fun printEggFreeSweet() {
+        try {
+            val meal = getEggFreeSweetUseCase()
+            println("\nEgg-Free Sweet:")
+            println("Name: ${meal.name}")
+            println("Minutes: ${meal.minutes}")
+            println("Submitted: ${meal.submitted}")
+            println("Nutrition: ${meal.nutrition}")
+            println("StepsCount: ${meal.stepsCount}")
+            println("Steps: ${meal.steps}")
+            println("Description: ${meal.description.take(150)}...")
+            println("Ingredients: ${meal.ingredients}")
+            println("IngredientsCount: ${meal.ingredientsCount}")
+        } catch (e: NoSuchElementException) {
+            println("error: ${e.message}\n")
         }
     }
 }
