@@ -1,6 +1,7 @@
 package data
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import org.damascus.utils.CSV_FILE_PATH
 import java.io.File
 import java.io.IOException
 
@@ -18,14 +19,11 @@ class CsvFileReader {
     }
 
     private fun getCsvFile(): File {
-        val foodCsvFile = File(FILE_NAME)
+            val foodCsvFile = File(CSV_FILE_PATH)
         if (foodCsvFile.exists()) {
             return foodCsvFile
         }
         throw IOException("File Not Found")
     }
 
-    companion object{
-        private const val FILE_NAME = "assets/food.csv"
-    }
 }
