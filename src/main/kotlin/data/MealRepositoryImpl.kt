@@ -6,6 +6,7 @@ import org.damascus.model.Meal
 
 class MealRepositoryImpl(private val csvMealDataSource: CsvMealDataSource) : MealRepository {
     private val suggestedEggFreeSweets = mutableSetOf<Int>()
+    private val suggestedHighCalorieMeals = mutableSetOf<Int>()
 
     override fun getAllMeals(): List<Meal> = csvMealDataSource.loadMeals()
 
@@ -22,5 +23,18 @@ class MealRepositoryImpl(private val csvMealDataSource: CsvMealDataSource) : Mea
         val next = eggFree.random()
         suggestedEggFreeSweets.add(next.id)
         return next
+    }
+
+    override fun getHighCalorieMeal(): Meal {
+        val allMeals = getAllMeals()
+        val highCal = allMeals.filter {
+            it.nutrition.calories > 700 && !suggestedHighCalorieMeals.contains(it.id)
+        }
+
+        if (highCal.isEmpty()) throw NoSuchElementException("No more high-calorie meals.")
+
+        val selected = highCal.random()
+        suggestedHighCalorieMeals.add(selected.id)
+        return selected
     }
 }
