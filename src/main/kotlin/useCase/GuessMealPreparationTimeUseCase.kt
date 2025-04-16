@@ -4,16 +4,14 @@ import org.damascus.logic.MealRepository
 import java.util.*
 
 
-class GuessMealPreparationTimeUseCase(
-    private val mealRepository: MealRepository, ) {
+class GuessMealPreparationTimeUseCase(private val mealRepository: MealRepository) {
 
     fun playGuessGame() {
         val scanner = Scanner(System.`in`)
-
         val meal = mealRepository.getAllMeals().random()
         val actualTime = meal.minutes
 
-        if (actualTime == 0 ) {
+        if (actualTime == 0) {
             println("This meal does not have a defined preparation time. Choosing another one.")
             return
         }
@@ -48,5 +46,4 @@ class GuessMealPreparationTimeUseCase(
 
         println("❌ No more attempts. The correct time was: $actualTime minutes.")
     }
-
 }
