@@ -2,34 +2,41 @@ package org.damascus.useCase
 
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
+import org.damascus.model.NutritionAverages
 
 class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository) {
 
+
     fun getHealthyFastFoodMeals(): List<String> {
         val meals = mealsRepository.getAllMeals()
-        val (avgFat, avgSaturatedFat, avgCarbs) = computeNutritionAverages(meals)
+        val averages= computeNutritionAverages(meals)
         return meals
-            .filter { meal -> meal.isHealthyFastFoodMeal(avgFat, avgSaturatedFat, avgCarbs) }
+            .filter { meal -> meal.isHealthyFastFoodMeal(averages) }
             .take(TOP_MEALS)
             .map { meal -> meal.name }
     }
 
+
     fun List<Double?>.calculateAverage(): Double =
         filterNotNull().let { if (it.isNotEmpty()) it.average() else 0.0 }
 
-    private fun computeNutritionAverages(meals: List<Meal>): Triple<Double, Double, Double> {
+
+    private fun computeNutritionAverages(meals: List<Meal>): NutritionAverages {
         val avgFat = meals.map { it.nutrition.totalFat }.calculateAverage()
         val avgSaturatedFat = meals.map { it.nutrition.saturatedFat }.calculateAverage()
         val avgCarbs = meals.map { it.nutrition.carbohydrates }.calculateAverage()
-        return Triple(avgFat, avgSaturatedFat, avgCarbs)
+        return NutritionAverages(avgFat,avgSaturatedFat,avgCarbs)
     }
 
-    private fun Meal.isHealthyFastFoodMeal(avgFat: Double, avgSaturatedFat: Double, avgCarbs: Double): Boolean {
+
+    private fun Meal.isHealthyFastFoodMeal(averages: NutritionAverages): Boolean {
         return minutes?.let { preparationTime -> preparationTime <= 15 } == true &&
-                nutrition.totalFat?.let { totalFat -> totalFat < avgFat } == true &&
-                nutrition.saturatedFat?.let { saturatedFat -> saturatedFat < avgSaturatedFat } == true &&
-                nutrition.carbohydrates?.let { carbohydrates -> carbohydrates < avgCarbs } == true
+                nutrition.totalFat?.let { totalFat -> totalFat < averages.avgFat } == true &&
+                nutrition.saturatedFat?.let { saturatedFat -> saturatedFat < averages.avgSaturatedFat } == true &&
+                nutrition.carbohydrates?.let { carbohydrates -> carbohydrates < averages.avgCarbs } == true
     }
+
+
     companion object{
         const val TOP_MEALS =10
     }
