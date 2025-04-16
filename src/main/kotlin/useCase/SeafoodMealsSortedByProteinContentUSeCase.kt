@@ -8,13 +8,11 @@ class SeafoodMealsSortedByProteinContentUSeCase(private val mealRepository: Meal
         return mealRepository.getAllMeals()
             .filter {meal->meal.isSeafoodMeal()}
             .sortedByDescending { meal->meal.nutrition.protein }
-            .take(10)
     }
 
     private fun Meal.isSeafoodMeal():Boolean{
         return this.tags.any{tag->tag.contains("seafood",ignoreCase = true)}
     }
-
 
 
 }
