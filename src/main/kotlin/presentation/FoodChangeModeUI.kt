@@ -21,7 +21,7 @@ class FoodChangeMoodUI(
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { printMealsByDate() },
+                { showMealsForSelectedDate() },
                 { }
             )
         )
@@ -72,51 +72,54 @@ class FoodChangeMoodUI(
     }
 
 
-    private fun printMealsByDate() {
+    private fun showMealsForSelectedDate() {
         print("\n📅 Enter date (yyyy-MM-dd): ")
-        val input = readlnOrNull() ?: return
 
-        try {
-            mealsByDate = getMealsByDateUseCase(input)
+        readlnOrNull()?.let { input ->
+            val meals = try {
+                getMealsByDateUseCase(input)
+            } catch (e: IllegalArgumentException) {
+                println("❌ ${e.message}")
+                return
+            } catch (e: NoSuchElementException) {
+                println("⚠️ ${e.message}")
+                return
+            }
+
+            mealsByDate = meals
             println("\n🍽️ Meals added on $input:")
-            mealsByDate.forEach { meal ->
+            meals.forEach { meal ->
                 println("🔹 [${meal.id}] ${meal.name}")
             }
 
-            printMealDetailsById()
-
-        } catch (e: IllegalArgumentException) {
-            println("❌ ${e.message}")
-        } catch (e: NoSuchElementException) {
-            println("⚠️ ${e.message}")
+            showDetailedMealView()
         }
     }
 
-    private fun printMealDetailsById() {
+    private fun showDetailedMealView() {
         if (mealsByDate.isEmpty()) {
             println("⚠️ No meals found. Please search by date first.")
             return
         }
 
         print("\n🔢 Enter meal ID to see details: ")
-        val mealId = readlnOrNull()?.toIntOrNull()
 
-        if (mealId != null) {
-            val selectedMeal = mealsByDate.find { it.id == mealId }
-
-            if (selectedMeal != null) {
-                println("\n🍽️ Meal Details: ${selectedMeal.name}")
-                println("🔸 Description: ${selectedMeal.description}")
-                println("🔸 Preparation Time: ${selectedMeal.minutes} minutes")
-                println("🔸 Submitted On: ${selectedMeal.submitted}")
-                println("🔸 Ingredients: ${selectedMeal.ingredients.joinToString(", ")}")
-                println("🔸 Steps to Prepare:")
-                selectedMeal.steps.forEachIndexed { index, step ->
+        readlnOrNull()?.toIntOrNull()
+            ?.let { id -> mealsByDate.find { it.id == id } }
+            ?.also { meal ->
+                println("\n🍽️ Meal Details: ${meal.name}")
+                println("\n🍽️ Meal Id: ${meal.id}")
+                println("ℹ️ Description: ${meal.description}")
+                println("⌚ Preparation Time: ${meal.minutes} minutes")
+                println("📅 Submitted On: ${meal.submitted}")
+                println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
+                println("🔢 ${meal.stepsCount} Steps to Prepare:")
+                meal.steps.forEachIndexed { index, step ->
                     println("  ${index + 1}. $step")
                 }
 
                 println("\n🍏 Nutritional Information:")
-                with(selectedMeal.nutrition) {
+                with(meal.nutrition) {
                     println("🔸 Calories: $calories kcal")
                     println("🔸 Total Fat: $totalFat g")
                     println("🔸 Saturated Fat: $saturatedFat g")
@@ -126,14 +129,8 @@ class FoodChangeMoodUI(
                     println("🔸 Protein: $protein g")
                 }
 
-                println("\n🏷️ Tags: ${selectedMeal.tags.joinToString(" || ")}")
-
-
-            } else {
-                println("❌ Meal with ID $mealId not found in the list.")
+                println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
             }
-        } else {
-            println("❌ Invalid meal ID.")
-        }
+            ?: println("❌ Invalid or non-existing meal ID.")
     }
 }

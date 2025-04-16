@@ -9,24 +9,23 @@ class GetMealsByDateUseCase(private val repository: MealRepository) {
 
     operator fun invoke(inputDate: String): List<Meal> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        val targetDate = try {
+
+        val targetDate: LocalDate = try {
             LocalDate.parse(inputDate, formatter)
         } catch (e: Exception) {
             throw IllegalArgumentException("⚠️ Incorrect date format. Use yyyy-MM-dd.")
         }
 
-        val allMeals = repository.getAllMeals()
-
-        val matchedMeals = allMeals.filter {
+        val matchedMeals = repository.getAllMeals().filter { meal ->
             try {
-                LocalDate.parse(it.submitted, formatter) == targetDate
-            } catch (_: Exception) {
+                LocalDate.parse(meal.submitted, formatter) == targetDate
+            } catch (e: Exception) {
                 false
             }
         }
 
         if (matchedMeals.isEmpty()) {
-            throw NoSuchElementException("😢 No meals found on $inputDate.")
+            throw NoSuchElementException("❌ No meals found on $inputDate.")
         }
 
         return matchedMeals
