@@ -2,9 +2,11 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.useCase.SeafoodMealsSortedByProteinContentUSeCase
 
 class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val seafoodMealsSortedByProteinContentUSeCase: SeafoodMealsSortedByProteinContentUSeCase
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -13,12 +15,11 @@ class FoodChangeMoodUI(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
-                "Get ........"
+                "Display Seafood Meals Sorted By Protein Content",
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { },
+                { printSeafoodMeals()},
                 { }
             )
         )
@@ -69,6 +70,16 @@ class FoodChangeMoodUI(
                         "Ingredients=${meal.ingredients}\n " +
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
+        }
+    }
+    fun printSeafoodMeals(){
+        val seafoodMeals = seafoodMealsSortedByProteinContentUSeCase.sortSeafoodMealsByProteinContent()
+        if(seafoodMeals.isEmpty()){
+            println("No seafood meals available")
+            return
+        }
+        seafoodMeals.forEachIndexed { index, meal ->
+            println("Meal ${index + 1} : ${meal.name} - Protein Content : ${meal.nutrition.protein}g ")
         }
     }
 }
