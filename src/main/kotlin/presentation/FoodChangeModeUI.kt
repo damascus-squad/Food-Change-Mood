@@ -2,9 +2,11 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.useCase.GetHealthyFastFoodMealsUseCase
 
 class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val getHealthyFastFoodMealsUseCase: GetHealthyFastFoodMealsUseCase
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -13,12 +15,11 @@ class FoodChangeMoodUI(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
-                "Get ........"
+                "Display healthy fast food meals",
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { },
+                { printHealthyMeals()},
                 { }
             )
         )
@@ -71,4 +72,17 @@ class FoodChangeMoodUI(
             )
         }
     }
+
+    fun printHealthyMeals() {
+        val healthyMeals = getHealthyFastFoodMealsUseCase.getHealthyFastFoodMeals()
+        if (healthyMeals.isEmpty()) {
+            println("No healthy meals available.")
+        } else {
+            healthyMeals.forEachIndexed { index, mealName ->
+                println("Healthy Meal ${index + 1}: $mealName")
+            }
+        }
+    }
+
+
 }
