@@ -4,10 +4,12 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetHighCalorieMealUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase
 ) {
 
     fun start() {
@@ -16,12 +18,12 @@ class FoodChangeMoodUi(
             options = listOf(
                 "Display first 10 meals",
                 "Easy Food Suggestion",
-                "Get ........"
+                "Get High Calorie Meal"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
-                { }
+                { printHighCalorieMeal()}
             )
         )
     }
@@ -74,6 +76,56 @@ class FoodChangeMoodUi(
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
         }
+    }
+
+    fun printHighCalorieMeal() {
+        while (true) {
+            try {
+                val meals = getHighCalorieMealUseCase()
+
+                for (meal in meals) {
+                    println("\nHigh Calorie Meal")
+                    println("Name: ${meal.name}")
+                    println("Calories: ${meal.nutrition.calories}")
+                    println("Description: ${meal.description.take(150)}...")
+
+                    if (askUserToLike()) {
+                        printMealDetails(meal)
+                        return
+                    } else {
+                        println("Skipping...")
+                        continue
+                    }
+                }
+
+            } catch (e: NoSuchElementException) {
+                println("No more high-calorie meals to show.")
+                return
+            }
+        }
+    }
+
+
+    private fun askUserToLike(): Boolean {
+        print("Do you like it? (y/n): ")
+        return when (readlnOrNull()?.trim()?.lowercase()) {
+            "y" -> true
+            "n" -> false
+            else -> {
+                println("Invalid input. Please enter 'y' or 'n'.")
+                askUserToLike()
+            }
+        }
+    }
+
+    private fun printMealDetails(meal: Meal) {
+        println("Minutes: ${meal.minutes}")
+        println("Submitted: ${meal.submitted}")
+        println("Nutrition: ${meal.nutrition}")
+        println("StepsCount: ${meal.stepsCount}")
+        println("Steps: ${meal.steps}")
+        println("Ingredients: ${meal.ingredients}")
+        println("IngredientsCount: ${meal.ingredientsCount}")
     }
 
     private fun getInput() = readLine()?.toIntOrNull()
