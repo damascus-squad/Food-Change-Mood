@@ -16,9 +16,7 @@ val appModule = module {
     single { File(CSV_FILE_PATH) }
     single { MealDataParser() }
     single { MealFileReader() }
-
     single { CsvMealDataSource(get(), get()) }
     single<MealRepository> { MealRepositoryImpl(get()) }
-
-    single { FoodChangeMoodUI(get()) }
+    single { FoodChangeMoodUI(get(),get()) }
 }

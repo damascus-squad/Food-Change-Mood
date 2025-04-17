@@ -1,11 +1,9 @@
 package org.damascus.presentation
 
-
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.useCase.ExploreOtherCountriesFoodUseCase
 
-class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
-) {
+class FoodChangeMoodUI(private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,private val foodUseCase: ExploreOtherCountriesFoodUseCase) {
     private fun getInput() = readLine()?.toIntOrNull()
 
     fun start() {
@@ -14,12 +12,26 @@ class FoodChangeMoodUI(
             options = listOf(
                 "Display first 10 meals",
                 "Get .....",
-                "Get ........"
+                "Get ........",
+                "Get ........",
+                "Get ........",
+                "Get ........",
+                "Get ........",
+                "Get ........",
+                "Get ........",
+                "Explore Other Countries' Food"
             ),
             actions = listOf(
                 { printFirst10Meals() },
                 { },
-                { }
+                { },
+                { },
+                { },
+                { },
+                { },
+                { },
+                { },
+                { foodUseCase.getCountryFood(20) }
             )
         )
     }
