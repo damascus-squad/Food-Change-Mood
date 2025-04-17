@@ -2,23 +2,25 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.model.Meal
+import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 
-class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+class FoodChangeMoodUi(
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
 ) {
-    private fun getInput() = readLine()?.toIntOrNull()
 
     fun start() {
         showMenu(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
+                "Easy Food Suggestion",
                 "Get ........"
             ),
             actions = listOf(
-                { printFirst10Meals() },
-                { },
+                { printMealsList(getFirstNMealsUseCase()) },
+                { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { }
             )
         )
@@ -50,10 +52,12 @@ class FoodChangeMoodUI(
 
 
     /**
-     * for test first run
+     * This function displays any list of meals
+     * every meal will be displayed as each property in one line
+     * between each meal 2 lines
      */
-    fun printFirst10Meals() {
-        getFirstNMealsUseCase().forEachIndexed { index, meal ->
+    fun printMealsList(mealsList:List<Meal>) {
+        mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
                         "Name='${meal.name}'\n " +
@@ -65,10 +69,12 @@ class FoodChangeMoodUI(
                         "Nutrition=${meal.nutrition}\n " +
                         "StepsCount=${meal.stepsCount}\n " +
                         "Steps=${meal.steps}\n " +
-                        "Description='${meal.description.take(30)}...'\n " + // to avoid long prints
+                        "Description='${meal.description.take(30)}...'\n " +
                         "Ingredients=${meal.ingredients}\n " +
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
         }
     }
+
+    private fun getInput() = readLine()?.toIntOrNull()
 }
