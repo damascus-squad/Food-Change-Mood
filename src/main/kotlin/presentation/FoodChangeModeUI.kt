@@ -54,10 +54,6 @@ class FoodChangeMoodUI(
 
 
 
-    /**
-     * 7 - Keto Diet Meal Helper :
-     * Suggests keto-friendly meals
-     */
     private fun showKetoMealHelper() {
         val meal = getKetoMealUseCase()
 
@@ -126,9 +122,6 @@ class FoodChangeMoodUI(
 
 
 
-    /**
-     * for test first run
-     */
     fun printFirst10Meals() {
         getFirstNMealsUseCase().forEachIndexed { index, meal ->
             println(
