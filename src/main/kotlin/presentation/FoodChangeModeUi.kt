@@ -5,11 +5,10 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 
-class FoodChangeMoodUI(
+class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
 ) {
-    private fun getInput() = readLine()?.toIntOrNull()
 
     fun start() {
         showMenu(
@@ -76,4 +75,6 @@ class FoodChangeMoodUI(
             )
         }
     }
+
+    private fun getInput() = readLine()?.toIntOrNull()
 }
