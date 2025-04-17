@@ -2,9 +2,12 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.logic.GetKetoMealUseCase
+import org.damascus.model.Meal
 
 class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val getKetoMealUseCase: GetKetoMealUseCase
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -13,12 +16,12 @@ class FoodChangeMoodUI(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
+                "Display a Keto Diet Meal",
                 "Get ........"
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { },
+                { showKetoMealHelper() },
                 { }
             )
         )
@@ -47,6 +50,80 @@ class FoodChangeMoodUI(
         }
         showMenu(title, options, actions)
     }
+
+
+
+
+    /**
+     * 7 - Keto Diet Meal Helper :
+     * Suggests keto-friendly meals
+     */
+    private fun showKetoMealHelper() {
+        val meal = getKetoMealUseCase()
+
+        if (meal == null) {
+            println("\nSorry, no more keto-friendly meals available!")
+            return
+        }
+
+        showMealSummary(meal)
+
+        showMenu(
+            title = "Keto Meal Options",
+            options = listOf(
+                "Like it 👍",
+                "Dislike 👎"
+            ),
+            actions = listOf(
+                { likeMeal() },
+                { dislikeMeal() }
+            )
+        )
+    }
+    private fun showMealSummary(meal: Meal) {
+        println("\n=== Keto-Friendly Meal Suggestion ===")
+        println("Name: ${meal.name}")
+        println("Description: ${meal.description.take(150)}${if (meal.description.length > 150) "..." else ""}")
+    }
+    private fun likeMeal() {
+        val meal = getKetoMealUseCase.likeCurrentMeal()
+
+        if (meal == null) {
+            println("\nNo meal information available.")
+            return
+        }
+
+        println("\n=== Full Meal Details ===")
+        println("Name: ${meal.name}")
+        println("Description: ${meal.description}")
+        println("Ingredients (${meal.ingredientsCount}):")
+        meal.ingredients.forEachIndexed { index, ingredient ->
+            println("  ${index + 1}. $ingredient")
+        }
+        println("\nPreparation Steps (${meal.stepsCount}):")
+        meal.steps.forEachIndexed { index, step ->
+            println("  ${index + 1}. $step")
+        }
+        println("\nNutritional Information:")
+        println("  Calories: ${meal.nutrition.calories}")
+        println("  Total Fat: ${meal.nutrition.totalFat}g")
+        println("  Carbohydrates: ${meal.nutrition.carbohydrates}g")
+        println("  Protein: ${meal.nutrition.protein}g")
+        println("  Sugar: ${meal.nutrition.sugar}g")
+        println("  Sodium: ${meal.nutrition.sodium}mg")
+        println("  Saturated Fat: ${meal.nutrition.saturatedFat}g")
+
+
+        println("\nPress Enter to return to main menu...")
+        readLine()
+        return
+    }
+    private fun dislikeMeal() {
+        getKetoMealUseCase.dislikeAndGetNewMeal()
+        showKetoMealHelper()
+    }
+
+
 
 
     /**
