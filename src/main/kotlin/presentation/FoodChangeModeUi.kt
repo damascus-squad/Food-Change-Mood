@@ -4,10 +4,12 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetEggFreeSweetUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase
 ) {
 
     fun start() {
@@ -16,12 +18,12 @@ class FoodChangeMoodUi(
             options = listOf(
                 "Display first 10 meals",
                 "Easy Food Suggestion",
-                "Get ........"
+                "Get Egg-Free Sweet"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
-                { }
+                { printEggFreeSweet()}
             )
         )
     }
@@ -73,6 +75,39 @@ class FoodChangeMoodUi(
                         "Ingredients=${meal.ingredients}\n " +
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
+        }
+    }
+
+    fun printEggFreeSweet() {
+        while (true) {
+            try {
+                val meal = getEggFreeSweetUseCase()
+                println("\nEgg-Free Sweet")
+                println("Name: ${meal.name}")
+                println("Description: ${meal.description.take(150)}...")
+
+                if (askUserToLike()) {
+                    printMealsList(getFirstNMealsUseCase())
+                    return
+                } else {
+                    println("Fetching another one...")
+                }
+
+            } catch (e: NoSuchElementException) {
+                println("Error: ${e.message}")
+                return
+            }
+        }
+    }
+    private fun askUserToLike(): Boolean {
+        print("Do you like it? (y/n): ")
+        return when (readlnOrNull()?.trim()?.lowercase()) {
+            "y" -> true
+            "n" -> false
+            else -> {
+                println("Invalid input. Please enter 'y' or 'n'.")
+                askUserToLike()
+            }
         }
     }
 
