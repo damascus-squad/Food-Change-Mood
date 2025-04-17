@@ -6,7 +6,5 @@ import org.koin.dsl.module
 
 val useCaseModule = module {
     single { GetFirstTenMealsUseCase(get() ) }
-
-
     single { IdentifyIraqiMealsUseCase(get() ) }
 }
