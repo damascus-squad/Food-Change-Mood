@@ -31,9 +31,9 @@ class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository
 
     private fun Meal.isHealthyFastFoodMeal(averages: NutritionAverages): Boolean {
         return minutes?.let { preparationTime -> preparationTime <= 15 } == true &&
-                nutrition.totalFat?.let { totalFat -> totalFat < averages.avgFat } == true &&
-                nutrition.saturatedFat?.let { saturatedFat -> saturatedFat < averages.avgSaturatedFat } == true &&
-                nutrition.carbohydrates?.let { carbohydrates -> carbohydrates < averages.avgCarbs } == true
+                nutrition.totalFat?.let { totalFat -> totalFat < averages.fat } == true &&
+                nutrition.saturatedFat?.let { saturatedFat -> saturatedFat < averages.saturatedFat } == true &&
+                nutrition.carbohydrates?.let { carbohydrates -> carbohydrates < averages.carbs } == true
     }
 
 
