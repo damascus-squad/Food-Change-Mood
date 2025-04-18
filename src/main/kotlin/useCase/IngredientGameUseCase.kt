@@ -40,7 +40,7 @@ class IngredientGameUseCase(private val mealRepository: MealRepository) {
             val choice = readLine()?.toIntOrNull()
 
             if(choice==null || choice !in(1..3)){
-                println("❌ Oops! Invalid input. It’s like adding pineapple to pizza... Just doesn’t work. Game Over!")
+                println("❌ Oops! Invalid input. It’s like adding pineapple to pizza... Just doesn’t work.")
                 continue
             }
 
@@ -51,7 +51,8 @@ class IngredientGameUseCase(private val mealRepository: MealRepository) {
                 correctAnswers++
                 println("✅ Ding ding ding! Correct! Your score: $score 🏆 You’re on fire! 🔥\n")
             }else{
-                println("❌ Oops, wrong ingredient! The correct answer was: $correctIngredient. It’s okay, everyone makes mistakes. Game Over!")
+                println("❌ Oops, wrong ingredient! The correct answer was: $correctIngredient. It’s okay, everyone makes mistakes.")
+                return
             }
             randomMealsIndex++
 
