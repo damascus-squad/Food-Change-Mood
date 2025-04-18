@@ -4,7 +4,7 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.ExploreOtherCountriesFoodUseCase
 
-class FoodChangeMoodUI(
+class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val foodUseCase: ExploreOtherCountriesFoodUseCase
 ) {
