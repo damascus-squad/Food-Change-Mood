@@ -2,14 +2,11 @@ package org.damascus.presentation
 
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
-import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
-import org.damascus.useCase.GetKetoMealUseCase
-import org.damascus.useCase.IdentifyIraqiMealsUseCase
-import org.damascus.useCase.SearchMealByNameUseCase
+import org.damascus.useCase.*
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val foodUseCase: ExploreOtherCountriesFoodUseCase
+    private val foodUseCase: ExploreOtherCountriesFoodUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
@@ -22,18 +19,10 @@ class FoodChangeMoodUi(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
-                "Get ........",
-                "Get ........",
-                "Get ........",
-                "Get ........",
                 "Identify iraqi meals",
                 "Easy Food Suggestion",
                 "Display a Keto Diet Meal",
                 "Search Meals",
-                "Get ........",
-                "Get ........",
-                "Get ........",
                 "Explore Other Countries' Food"
             ),
             actions = listOf(
@@ -42,14 +31,10 @@ class FoodChangeMoodUi(
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
-                { }
-                { },
-                { },
-                { },
                 {
                     val country = promptForCountry()
                     val result = foodUseCase.getCountryFood(country, limit = 20)
-                    displayCountryMeals(result,country)
+                    displayCountryMeals(result, country)
                 }
             )
         )
@@ -94,9 +79,7 @@ class FoodChangeMoodUi(
      * every meal will be displayed as each property in one line
      * between each meal 2 lines
      */
-    fun printFirst10Meals() {
-        getFirstNMealsUseCase().forEachIndexed { index, meal ->
-    fun printMealsList(mealsList: List<Meal>) {
+    private fun printMealsList(mealsList: List<Meal>) {
         mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
@@ -116,13 +99,10 @@ class FoodChangeMoodUi(
         }
     }
 
-
-    fun showKetoMenu(meals: List<Meal>) {
+    private fun showKetoMenu(meals: List<Meal>) {
         val notShownMeals = meals.shuffled().toMutableList()
 
         var suggestion: Meal
-
-    private fun promptForCountry(): String {
         while (true) {
             if (notShownMeals.isEmpty()) {
                 println("No more keto meals available to suggest.")
@@ -161,6 +141,11 @@ class FoodChangeMoodUi(
                 3 -> return
                 else -> println("Invalid input. Try again.\n")
             }
+        }
+    }
+
+    private fun promptForCountry(): String {
+        while (true) {
             println("🌍 Enter the country name:")
             val input = readlnOrNull()?.trim().orEmpty()
             if (input.isNotBlank()) {
@@ -175,10 +160,12 @@ class FoodChangeMoodUi(
             println("No Meals Found for this $country")
             return
         }
+        println("✅ Found ${meals.size} meal(s) for '$country'. Showing ${meals.size}:\n")
+        meals.forEachIndexed { index, meal ->
+            println("🍽 #${index + 1}: ${meal.name}")
+            println("—".repeat(40))
+        }
     }
-
-
-    private fun getInput() = readLine()?.toIntOrNull()
 
     private fun getSearchPhrase(): String {
         while (true) {
@@ -187,10 +174,8 @@ class FoodChangeMoodUi(
                 return it
             }
             println("Invalid input, please try again.")
-        println("✅ Found ${meals.size} meal(s) for '$country'. Showing ${meals.size}:\n")
-        meals.forEachIndexed { index, meal ->
-            println("🍽 #${index + 1}: ${meal.name}")
-            println("—".repeat(40))
+
         }
     }
+
 }
