@@ -12,7 +12,7 @@ import org.damascus.useCase.SearchMealByNameUseCase
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
-    private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase
+    private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase
@@ -33,7 +33,7 @@ class FoodChangeMoodUi(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
-                { printEggFreeSweet()}
+                { printEggFreeSweet()},
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
                 { }

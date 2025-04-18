@@ -20,5 +20,5 @@ val appModule = module {
     single { CsvMealDataSource(get(), get()) }
     single<MealRepository> { MealRepositoryImpl(get()) }
 
-    single { FoodChangeMoodUi(get(), get(),get()) }
+    single { FoodChangeMoodUi(get(), get(),get(),get(),get(),get()) }
 }
