@@ -1,13 +1,19 @@
 package org.damascus.useCase
 
 import org.damascus.logic.MealRepository
+import org.damascus.model.Meal
 import org.damascus.model.MealMatchResult
 import org.damascus.model.TextMatchResult
 
-class SearchMealByNameUseCase (
+class SearchMealByNameUseCase(
     private val mealRepo: MealRepository,
 ) {
-    operator fun invoke(searchPhrase: String): List<MealMatchResult> {
+    operator fun invoke(searchPhrase: String): List<Meal> {
+
+        if (searchPhrase.length > 31) {
+            throw IllegalArgumentException("Search phrase too long: maximum length is 31 characters")
+        }
+
         val results = mutableListOf<MealMatchResult>()
 
         mealRepo.getAllMeals().forEach { meal ->
@@ -26,7 +32,7 @@ class SearchMealByNameUseCase (
             }
         }
 
-        return results
+        return results.sorted().map { it.meal }
     }
 
     /**
@@ -40,9 +46,6 @@ class SearchMealByNameUseCase (
         if (pattern.isEmpty()) return emptyList()
 
         val patternLength = pattern.length
-        if (patternLength > 31) {
-            throw IllegalArgumentException("Pattern too long: maximum length is 31 characters")
-        }
 
         // Initialize state array (k+1 states, each initially set to ~1)
         val states = LongArray(maxErrors + 1) { -2L }

@@ -4,10 +4,12 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.SearchMealByNameUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val searchMealByNameUseCase: SearchMealByNameUseCase
 ) {
 
     fun start() {
@@ -16,14 +18,24 @@ class FoodChangeMoodUi(
             options = listOf(
                 "Display first 10 meals",
                 "Easy Food Suggestion",
-                "Get ........"
+                "Search Meals",
+                "Get ........",
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { printSearchResult() },
                 { }
             )
         )
+    }
+
+    private fun printSearchResult() {
+        try {
+            printMealsList(searchMealByNameUseCase(getSearchPhrase()).take(10))
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
 
     private fun showMenu(
@@ -77,4 +89,14 @@ class FoodChangeMoodUi(
     }
 
     private fun getInput() = readLine()?.toIntOrNull()
+
+    private fun getSearchPhrase(): String {
+        while (true) {
+            print("Please enter the search phrase: ")
+            readlnOrNull()?.let {
+                return it
+            }
+            println("Invalid input, please try again.")
+        }
+    }
 }
