@@ -74,7 +74,7 @@ class FoodChangeMoodUI(
     }
 
     fun printHealthyMeals() {
-        val healthyMeals = getHealthyFastFoodMealsUseCase.getHealthyFastFoodMeals()
+        val healthyMeals = getHealthyFastFoodMealsUseCase()
         if (healthyMeals.isEmpty()) {
             println("No healthy meals available.")
         } else {

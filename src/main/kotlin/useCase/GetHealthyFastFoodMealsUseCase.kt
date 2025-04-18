@@ -7,9 +7,9 @@ import org.damascus.model.NutritionAverages
 class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository) {
 
 
-    fun getHealthyFastFoodMeals(): List<String> {
+    operator fun invoke(): List<String> {
         val meals = mealsRepository.getAllMeals()
-        val averages= computeNutritionAverages(meals)
+        val averages = computeNutritionAverages(meals)
         return meals
             .filter { meal -> meal.isHealthyFastFoodMeal(averages) }
             .take(TOP_MEALS)
@@ -25,7 +25,7 @@ class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository
         val avgFat = meals.map { it.nutrition.totalFat }.calculateAverage()
         val avgSaturatedFat = meals.map { it.nutrition.saturatedFat }.calculateAverage()
         val avgCarbs = meals.map { it.nutrition.carbohydrates }.calculateAverage()
-        return NutritionAverages(avgFat,avgSaturatedFat,avgCarbs)
+        return NutritionAverages(avgFat, avgSaturatedFat, avgCarbs)
     }
 
 
@@ -37,7 +37,7 @@ class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository
     }
 
 
-    companion object{
-        const val TOP_MEALS =10
+    companion object {
+        const val TOP_MEALS = 10
     }
 }
