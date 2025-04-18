@@ -3,10 +3,7 @@ package org.damascus.presentation
 
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
-import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
-import org.damascus.useCase.GetKetoMealUseCase
-import org.damascus.useCase.IdentifyIraqiMealsUseCase
-import org.damascus.useCase.SearchMealByNameUseCase
+import org.damascus.useCase.*
 import java.util.*
 
 class FoodChangeMoodUi(
@@ -14,7 +11,8 @@ class FoodChangeMoodUi(
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
-    private val searchMealByNameUseCase: SearchMealByNameUseCase
+    private val searchMealByNameUseCase: SearchMealByNameUseCase,
+    private val guessMealPreparationTimeUseCase: GuessMealPreparationTimeUseCase
 ) {
 
     fun start() {
@@ -34,7 +32,6 @@ class FoodChangeMoodUi(
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
-                { printFirst10Meals() },
                 { playGuessGame(guessMealPreparationTimeUseCase.getRandomMeal()) },
             )
         )
@@ -74,7 +71,12 @@ class FoodChangeMoodUi(
 
 
     /**
+     * This function displays any list of meals
+     * every meal will be displayed as each property in one line
+     * between each meal 2 lines
      */
+    fun printMealsList(mealsList: List<Meal>) {
+        mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
                         "Name='${meal.name}'\n " +
@@ -86,6 +88,7 @@ class FoodChangeMoodUi(
                         "Nutrition=${meal.nutrition}\n " +
                         "StepsCount=${meal.stepsCount}\n " +
                         "Steps=${meal.steps}\n " +
+                        "Description='${meal.description.take(30)}...'\n " +
                         "Ingredients=${meal.ingredients}\n " +
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
@@ -93,7 +96,7 @@ class FoodChangeMoodUi(
     }
 
 
-    fun showKetoMenu(meals: List<Meal>) {
+    private fun showKetoMenu(meals: List<Meal>) {
         val notShownMeals = meals.shuffled().toMutableList()
 
         var suggestion: Meal
@@ -152,36 +155,38 @@ class FoodChangeMoodUi(
         }
 
     }
-private fun playGuessGame(meal:Meal){
-    println("🎮 Welcome to the Guess Game!")
-    println("Meal name: ${meal.name}")
-    println("Guess the preparation time in minutes (you have 3 attempts)")
 
-    val scanner = Scanner(System.`in`)
-    var attempts = 3
+    private fun playGuessGame(meal: Meal) {
+        println("🎮 Welcome to the Guess Game!")
+        println("Meal name: ${meal.name}")
+        println("Guess the preparation time in minutes (you have 3 attempts)")
 
-    while (attempts > 0) {
-        print("Enter your guess: ")
-        val guess = scanner.nextLine().toIntOrNull()
+        val scanner = Scanner(System.`in`)
+        var attempts = 3
 
-        if (guess == null) {
-            println("⚠️ Please enter a valid number.")
-            continue
-        }
+        while (attempts > 0) {
+            print("Enter your guess: ")
+            val guess = scanner.nextLine().toIntOrNull()
 
-        when {
-            guess == meal.minutes -> {
-                println("✅ Correct! The preparation time is ${meal.minutes} minutes.")
-                return
+            if (guess == null) {
+                println("⚠️ Please enter a valid number.")
+                continue
             }
-            guess < meal.minutes -> println("⬆️ Your guess is too low.")
-            else -> println("⬇️ Your guess is too high.")
+
+            when {
+                guess == meal.minutes -> {
+                    println("✅ Correct! The preparation time is ${meal.minutes} minutes.")
+                    return
+                }
+
+                guess < meal.minutes -> println("⬆️ Your guess is too low.")
+                else -> println("⬇️ Your guess is too high.")
+            }
+
+            attempts--
+            if (attempts > 0) println("📌 You have $attempts attempt(s) left.")
         }
 
-        attempts--
-        if (attempts > 0) println("📌 You have $attempts attempt(s) left.")
+        println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.")
     }
-
-    println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.")
-}
 }
