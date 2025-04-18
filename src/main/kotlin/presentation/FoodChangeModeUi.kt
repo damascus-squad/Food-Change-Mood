@@ -4,10 +4,11 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
-import org.damascus.useCase.SearchMealByNameUseCase
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase
 ) {
@@ -17,12 +18,14 @@ class FoodChangeMoodUi(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
+                "Identify iraqi meals",
                 "Easy Food Suggestion",
                 "Search Meals",
                 "Get ........",
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
+                { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { printSearchResult() },
                 { }
