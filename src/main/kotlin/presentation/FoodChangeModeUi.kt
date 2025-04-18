@@ -4,10 +4,13 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetItalianLargeGroupMealsUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val getItalianLargeGroupMealsUseCase: GetItalianLargeGroupMealsUseCase,
+
 ) {
 
     fun start() {
@@ -16,11 +19,13 @@ class FoodChangeMoodUi(
             options = listOf(
                 "Display first 10 meals",
                 "Easy Food Suggestion",
+                "Show Italian Large Meals",
                 "Get ........"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { printMealsList(getItalianLargeGroupMealsUseCase()) },
                 { }
             )
         )
