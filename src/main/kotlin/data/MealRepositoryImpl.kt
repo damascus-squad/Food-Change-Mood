@@ -22,4 +22,6 @@ class MealRepositoryImpl(private val csvMealDataSource: CsvMealDataSource) : Mea
         suggestedEggFreeSweets.add(next.id)
         return next
     }
+
+
 }

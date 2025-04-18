@@ -5,11 +5,17 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetEggFreeSweetUseCase
+import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
+import org.damascus.useCase.SearchMealByNameUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase
+    private val getKetoMealUseCase: GetKetoMealUseCase,
+    private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
+    private val searchMealByNameUseCase: SearchMealByNameUseCase
 ) {
 
     fun start() {
@@ -17,15 +23,30 @@ class FoodChangeMoodUi(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
+                "Identify iraqi meals",
                 "Easy Food Suggestion",
-                "Get Egg-Free Sweet"
+                "Display a Keto Diet Meal",
+                "Search Meals",
+                "Get Egg-Free Sweet",
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
+                { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { printEggFreeSweet()}
+                { showKetoMenu(getKetoMealUseCase()) },
+                { printSearchResult() },
+                { }
             )
         )
+    }
+
+    private fun printSearchResult() {
+        try {
+            printMealsList(searchMealByNameUseCase(getSearchPhrase()).take(10))
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
 
     private fun showMenu(
@@ -58,7 +79,7 @@ class FoodChangeMoodUi(
      * every meal will be displayed as each property in one line
      * between each meal 2 lines
      */
-    fun printMealsList(mealsList:List<Meal>) {
+    fun printMealsList(mealsList: List<Meal>) {
         mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
@@ -111,5 +132,63 @@ class FoodChangeMoodUi(
         }
     }
 
+
+    fun showKetoMenu(meals: List<Meal>) {
+        val notShownMeals = meals.shuffled().toMutableList()
+
+        var suggestion: Meal
+
+        while (true) {
+            if (notShownMeals.isEmpty()) {
+                println("No more keto meals available to suggest.")
+                return
+            }
+
+            suggestion = notShownMeals.removeLast()
+            println(
+                """
+                    Here is your keto meal suggestion:
+                    name        : ${suggestion.name}
+                    description : ${suggestion.description}
+            """.trimIndent()
+            )
+
+            println(
+                """
+                    
+            === Like or Dislike? ===
+            1- Like 👍
+            2- Dislike 👎
+            3- Exit keto ❌
+            """.trimIndent()
+            )
+
+            print("Enter your choice : ")
+            val input = getInput()
+
+            when (input) {
+                1 -> {
+                    printMealsList(listOf(suggestion))
+                    return
+                }
+
+                2 -> continue
+                3 -> return
+                else -> println("Invalid input. Try again.\n")
+            }
+        }
+    }
+
+
     private fun getInput() = readLine()?.toIntOrNull()
+
+    private fun getSearchPhrase(): String {
+        while (true) {
+            print("Please enter the search phrase: ")
+            readlnOrNull()?.let {
+                return it
+            }
+            println("Invalid input, please try again.")
+        }
+    }
 }
