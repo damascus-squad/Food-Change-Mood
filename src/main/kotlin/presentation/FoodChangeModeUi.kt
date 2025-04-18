@@ -6,7 +6,7 @@ import org.damascus.model.Meal
 import org.damascus.useCase.GuessMealPreparationTimeUseCase
 import java.util.*
 
-class FoodChangeMoodUI(
+class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val guessMealPreparationTimeUseCase: GuessMealPreparationTimeUseCase
 ) {
