@@ -6,6 +6,7 @@ import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetKetoMealUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
+import org.damascus.useCase.SearchMealByNameUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
@@ -13,7 +14,7 @@ class FoodChangeMoodUi(
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase
-    ) {
+) {
 
     fun start() {
         showMenu(
@@ -75,7 +76,7 @@ class FoodChangeMoodUi(
      * every meal will be displayed as each property in one line
      * between each meal 2 lines
      */
-    fun printMealsList(mealsList:List<Meal>) {
+    fun printMealsList(mealsList: List<Meal>) {
         mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
