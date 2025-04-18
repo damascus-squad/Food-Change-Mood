@@ -110,7 +110,15 @@ class FoodChangeMoodUI(
                 println("\n🍽️ Meal Details: ${meal.name}")
                 println("\n🍽️ Meal Id: ${meal.id}")
                 println("ℹ️ Description: ${meal.description}")
-                println("⌚ Preparation Time: ${meal.minutes} minutes")
+
+                if (meal.minutes >= 60) {
+                    val hours = meal.minutes / 60
+                    val remainingMinutes = meal.minutes % 60
+                    val timeText = if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
+                    println("⌚ Preparation Time: $timeText")
+                } else {
+                    println("⌚ Preparation Time: ${meal.minutes}m")
+                }
                 println("📅 Submitted On: ${meal.submitted}")
                 println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
                 println("🔢 ${meal.stepsCount} Steps to Prepare:")
