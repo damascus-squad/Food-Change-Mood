@@ -4,36 +4,27 @@ import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 
 class FindMealsByCaloriesAndProtein(
-    private val mealRepository: MealRepository
+    private val mealRepository: MealRepository,
 ) {
 
-    operator fun invoke(): List<Meal> {
-
-        val targetCalories: Double = getInputs("Enter Calories amount: ")
-        val targetProtein: Double = getInputs("Enter Protein amount: ")
-
-        val caloriesTolerance = 15.0
-        val proteinTolerance = 3.0
-
+    operator fun invoke(targetCalories: Double, targetProtein: Double): List<Meal> {
         val targetMeal = mealRepository.getAllMeals()
-            .filter {
-                it.nutrition.calories in targetCalories - caloriesTolerance..targetCalories + caloriesTolerance &&
-                        it.nutrition.protein in targetProtein - proteinTolerance..targetProtein + proteinTolerance
+            .filter { meal ->
+                isWithinCaloriesRange(calories = meal.nutrition.calories, target = targetCalories)
+                        &&
+                isWithinProteinRange(protein = meal.nutrition.protein, target = targetProtein)
             }
-
         return targetMeal
-
     }
 
-    private fun getInputs(title: String): Double {
-        print(title)
-        var userInput: Double? = readLine()?.toDoubleOrNull()
-        while (userInput == null) {
-            print("Wrong input: ")
-            userInput = readLine()?.toDoubleOrNull()
-        }
-        return userInput
+    private fun isWithinCaloriesRange(calories: Double, target: Double): Boolean {
+        val tolerance = 15.0
+        return calories in (target - tolerance)..(target + tolerance)
     }
 
+    private fun isWithinProteinRange(protein: Double, target: Double): Boolean {
+        val tolerance = 3.0
+        return protein in (target - tolerance)..(target + tolerance)
+    }
 
 }

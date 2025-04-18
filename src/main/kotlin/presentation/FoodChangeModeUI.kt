@@ -51,11 +51,26 @@ class FoodChangeMoodUI(
 
 
     fun printMealsByCaloriesAndProtein() {
-        val result: List<Meal> = findMealsByCaloriesAndProtein()
+
+        val targetCalories: Double = getInputs("Enter Calories amount: ")
+        val targetProtein: Double = getInputs("Enter Protein amount: ")
+
+        val result: List<Meal> = findMealsByCaloriesAndProtein(targetCalories = targetCalories, targetProtein = targetProtein)
+
         println("Found (${result.size}) meals")
         result.forEach { it ->
             println("Calories: ${it.nutrition.calories}, Protein: ${it.nutrition.protein} | Meal name: ${it.name}")
         }
+    }
+
+    private fun getInputs(title: String): Double {
+        print(title)
+        var userInput: Double? = readLine()?.toDoubleOrNull()
+        while (userInput == null) {
+            print("Wrong input: ")
+            userInput = readLine()?.toDoubleOrNull()
+        }
+        return userInput
     }
 
     /**
