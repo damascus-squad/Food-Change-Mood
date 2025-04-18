@@ -5,29 +5,44 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
-) {
+    private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
+    private val searchMealByNameUseCase: SearchMealByNameUseCase
+    ) {
 
     fun start() {
         showMenu(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
+                "Identify iraqi meals",
                 "Easy Food Suggestion",
                 "Display a Keto Diet Meal",
-                "Get ........"
+                "Search Meals",
+                "Get ........",
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
+                { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { showKetoMenu(getKetoMealUseCase()) },
+                { printSearchResult() },
                 { }
             )
         )
+    }
+
+    private fun printSearchResult() {
+        try {
+            printMealsList(searchMealByNameUseCase(getSearchPhrase()).take(10))
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
 
     private fun showMenu(
@@ -129,4 +144,14 @@ class FoodChangeMoodUi(
 
 
     private fun getInput() = readLine()?.toIntOrNull()
+
+    private fun getSearchPhrase(): String {
+        while (true) {
+            print("Please enter the search phrase: ")
+            readlnOrNull()?.let {
+                return it
+            }
+            println("Invalid input, please try again.")
+        }
+    }
 }
