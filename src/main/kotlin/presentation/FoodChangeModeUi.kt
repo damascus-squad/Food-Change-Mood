@@ -9,7 +9,8 @@ import org.damascus.useCase.IdentifyIraqiMealsUseCase
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
-    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val searchMealByNameUseCase: SearchMealByNameUseCase
 ) {
 
     fun start() {
@@ -19,15 +20,25 @@ class FoodChangeMoodUi(
                 "Display first 10 meals",
                 "Identify iraqi meals",
                 "Easy Food Suggestion",
-                "Get ........"
+                "Search Meals",
+                "Get ........",
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { printSearchResult() },
                 { }
             )
         )
+    }
+
+    private fun printSearchResult() {
+        try {
+            printMealsList(searchMealByNameUseCase(getSearchPhrase()).take(10))
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
 
     private fun showMenu(
@@ -81,4 +92,14 @@ class FoodChangeMoodUi(
     }
 
     private fun getInput() = readLine()?.toIntOrNull()
+
+    private fun getSearchPhrase(): String {
+        while (true) {
+            print("Please enter the search phrase: ")
+            readlnOrNull()?.let {
+                return it
+            }
+            println("Invalid input, please try again.")
+        }
+    }
 }
