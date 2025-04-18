@@ -8,9 +8,13 @@ import org.damascus.model.TextMatchResult
 class SearchMealByNameUseCase(
     private val mealRepo: MealRepository,
 ) {
+    companion object {
+        const val MAX_ALLOWED_SEARCH_PHRASE_LENGTH = 31
+    }
+
     operator fun invoke(searchPhrase: String): List<Meal> {
 
-        if (searchPhrase.length > 31) {
+        if (searchPhrase.length > MAX_ALLOWED_SEARCH_PHRASE_LENGTH) {
             throw IllegalArgumentException("Search phrase too long: maximum length is 31 characters")
         }
 
@@ -55,18 +59,17 @@ class SearchMealByNameUseCase(
 
         val characterMasks = buildCharacterMasks(pattern)
 
-        // Process each character of the text to find matches
         val matches = mutableListOf<TextMatchResult>()
         for (i in text.indices) {
             updateStates(states, characterMasks[text[i].code], maxErrors)
 
-            for (d in 0..maxErrors) {
-                if ((states[d] and finalBitMask) == 0L) {
+            for (j in 0..maxErrors) {
+                if ((states[j] and finalBitMask) == 0L) {
                     val startIndex = i - patternLength + 1
-                    matches.add(TextMatchResult(startIndex = startIndex, errors = d))
+                    matches.add(TextMatchResult(startIndex = startIndex, errors = j))
 
                     // no need to continue checking the text after a perfect match
-                    if (d == 0) return matches
+                    if (j == 0) return matches
 
                     break // no need to check for higher error counts (d+1, d+2...).
                 }
@@ -107,11 +110,11 @@ class SearchMealByNameUseCase(
         states[0] = (states[0] or charMask) shl 1
 
         // Update states for 1 to k errors
-        for (d in 1..maxErrors) {
-            val currentState = states[d]
+        for (i in 1..maxErrors) {
+            val currentState = states[i]
 
             // Update considering substitution errors
-            states[d] = (previousState and (states[d] or charMask)) shl 1
+            states[i] = (previousState and (states[i] or charMask)) shl 1
 
             previousState = currentState
         }
