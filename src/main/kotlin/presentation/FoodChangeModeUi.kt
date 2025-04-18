@@ -4,10 +4,12 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetKetoMealUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val getKetoMealUseCase: GetKetoMealUseCase,
 ) {
 
     fun start() {
@@ -16,11 +18,13 @@ class FoodChangeMoodUi(
             options = listOf(
                 "Display first 10 meals",
                 "Easy Food Suggestion",
+                "Display a Keto Diet Meal",
                 "Get ........"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { showKetoMenu(getKetoMealUseCase()) },
                 { }
             )
         )
@@ -75,6 +79,54 @@ class FoodChangeMoodUi(
             )
         }
     }
+
+
+    fun showKetoMenu(meals: List<Meal>) {
+        val notShownMeals = meals.shuffled().toMutableList()
+
+        var suggestion: Meal
+
+        while (true) {
+            if (notShownMeals.isEmpty()) {
+                println("No more keto meals available to suggest.")
+                return
+            }
+
+            suggestion = notShownMeals.removeLast()
+            println(
+                """
+                    Here is your keto meal suggestion:
+                    name        : ${suggestion.name}
+                    description : ${suggestion.description}
+            """.trimIndent()
+            )
+
+            println(
+                """
+                    
+            === Like or Dislike? ===
+            1- Like 👍
+            2- Dislike 👎
+            3- Exit keto ❌
+            """.trimIndent()
+            )
+
+            print("Enter your choice : ")
+            val input = getInput()
+
+            when (input) {
+                1 -> {
+                    printMealsList(listOf(suggestion))
+                    return
+                }
+
+                2 -> continue
+                3 -> return
+                else -> println("Invalid input. Try again.\n")
+            }
+        }
+    }
+
 
     private fun getInput() = readLine()?.toIntOrNull()
 }
