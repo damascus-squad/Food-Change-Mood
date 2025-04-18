@@ -1,9 +1,13 @@
 package org.damascus.presentation
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.model.Meal
 import org.damascus.useCase.ExploreOtherCountriesFoodUseCase
 
-class FoodChangeMoodUI(private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,private val foodUseCase: ExploreOtherCountriesFoodUseCase) {
+class FoodChangeMoodUI(
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val foodUseCase: ExploreOtherCountriesFoodUseCase
+) {
     private fun getInput() = readLine()?.toIntOrNull()
 
     fun start() {
@@ -31,7 +35,11 @@ class FoodChangeMoodUI(private val getFirstNMealsUseCase: GetFirstTenMealsUseCas
                 { },
                 { },
                 { },
-                { foodUseCase.getCountryFood(20) }
+                {
+                    val country = promptForCountry()
+                    val result = foodUseCase.getCountryFood(country, limit = 20)
+                    displayCountryMeals(result,country)
+                }
             )
         )
     }
@@ -81,6 +89,29 @@ class FoodChangeMoodUI(private val getFirstNMealsUseCase: GetFirstTenMealsUseCas
                         "Ingredients=${meal.ingredients}\n " +
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
+        }
+    }
+
+    private fun promptForCountry(): String {
+        while (true) {
+            println("🌍 Enter the country name:")
+            val input = readlnOrNull()?.trim().orEmpty()
+            if (input.isNotBlank()) {
+                return input
+            }
+            println("❌ Country name cannot be empty. Please try again.")
+        }
+    }
+
+    private fun displayCountryMeals(meals: List<Meal>, country: String) {
+        if (meals.isEmpty()){
+            println("No Meals Found for this $country")
+            return
+        }
+        println("✅ Found ${meals.size} meal(s) for '$country'. Showing ${meals.size}:\n")
+        meals.forEachIndexed { index, meal ->
+            println("🍽 #${index + 1}: ${meal.name}")
+            println("—".repeat(40))
         }
     }
 }
