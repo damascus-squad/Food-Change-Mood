@@ -2,9 +2,12 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.model.Meal
+import org.damascus.useCase.FindMealsByCaloriesAndProtein
 
 class FoodChangeMoodUI(
-    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase
+    private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val findMealsByCaloriesAndProtein: FindMealsByCaloriesAndProtein,
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -13,13 +16,11 @@ class FoodChangeMoodUI(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get .....",
-                "Get ........"
+                "Find meals by calories and protein",
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { },
-                { }
+                { printMealsByCaloriesAndProtein() },
             )
         )
     }
@@ -48,6 +49,14 @@ class FoodChangeMoodUI(
         showMenu(title, options, actions)
     }
 
+
+    fun printMealsByCaloriesAndProtein() {
+        val result: List<Meal> = findMealsByCaloriesAndProtein()
+        println("Found (${result.size}) meals")
+        result.forEach { it ->
+            println("Calories: ${it.nutrition.calories}, Protein: ${it.nutrition.protein} | Meal name: ${it.name}")
+        }
+    }
 
     /**
      * for test first run
