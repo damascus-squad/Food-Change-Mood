@@ -12,7 +12,7 @@ import org.damascus.useCase.SearchMealByNameUseCase
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
-    private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase
+    private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase
