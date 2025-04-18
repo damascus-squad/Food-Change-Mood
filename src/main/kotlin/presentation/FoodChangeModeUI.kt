@@ -2,7 +2,9 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.model.Meal
 import org.damascus.useCase.GuessMealPreparationTimeUseCase
+import java.util.*
 
 class FoodChangeMoodUI(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
@@ -25,7 +27,7 @@ class FoodChangeMoodUI(
                 { },
                 { },
                 { },
-                { guessMealPreparationTimeUseCase.playGuessGame()},
+                { playGuessGame(guessMealPreparationTimeUseCase.getRandomMeal()) },
             )
         )
     }
@@ -76,5 +78,38 @@ class FoodChangeMoodUI(
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
         }
+    }
+
+    private fun playGuessGame(meal:Meal){
+        println("🎮 Welcome to the Guess Game!")
+        println("Meal name: ${meal.name}")
+        println("Guess the preparation time in minutes (you have 3 attempts)")
+
+        val scanner = Scanner(System.`in`)
+        var attempts = 3
+
+        while (attempts > 0) {
+            print("Enter your guess: ")
+            val guess = scanner.nextLine().toIntOrNull()
+
+            if (guess == null) {
+                println("⚠️ Please enter a valid number.")
+                continue
+            }
+
+            when {
+                guess == meal.minutes -> {
+                    println("✅ Correct! The preparation time is ${meal.minutes} minutes.")
+                    return
+                }
+                guess < meal.minutes -> println("⬆️ Your guess is too low.")
+                else -> println("⬇️ Your guess is too high.")
+            }
+
+            attempts--
+            if (attempts > 0) println("📌 You have $attempts attempt(s) left.")
+        }
+
+        println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.")
     }
 }
