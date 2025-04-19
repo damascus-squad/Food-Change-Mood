@@ -3,7 +3,7 @@ package org.damascus.useCase
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 
-class SortSeafoodMealsByContentUSeCase(private val mealRepository: MealRepository) {
+class SortSeafoodMealsByContentUseCase(private val mealRepository: MealRepository) {
     operator fun invoke(): List<Meal> {
         return mealRepository.getAllMeals()
             .filter {meal->meal.isSeafoodMeal()}
