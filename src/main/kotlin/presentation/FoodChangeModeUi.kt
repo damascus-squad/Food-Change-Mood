@@ -12,7 +12,7 @@ class FoodChangeMoodUi(
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
-    private val guessMealPreparationTimeUseCase: GuessMealUseCase
+    private val getRandomMealUseCase: GetRandomMealUseCase
 ) {
 
     fun start() {
@@ -32,7 +32,7 @@ class FoodChangeMoodUi(
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
-                { playGuessGame(guessMealPreparationTimeUseCase.getRandomMeal()) },
+                { playGuessGame(getRandomMealUseCase.getRandomMeal()) },
             )
         )
     }
