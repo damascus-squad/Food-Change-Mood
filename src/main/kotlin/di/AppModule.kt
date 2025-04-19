@@ -5,12 +5,12 @@ import data.MealFileReader
 import data.MealRepositoryImpl
 import org.damascus.data.MealDataParser
 import org.damascus.data.source.CsvMealDataSource
+import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.logic.MealRepository
-import org.damascus.presentation.FoodChangeMoodUI
-import org.damascus.useCase.SortSeafoodMealsByContentUSeCase
+import org.damascus.presentation.FoodChangeMoodUi
+import org.damascus.useCase.*
 import org.damascus.utils.CSV_FILE_PATH
 import org.koin.dsl.module
-
 import java.io.File
 
 val appModule = module {
@@ -20,7 +20,25 @@ val appModule = module {
 
     single { CsvMealDataSource(get(), get()) }
     single<MealRepository> { MealRepositoryImpl(get()) }
-    single { SortSeafoodMealsByContentUSeCase(get()) }
 
-    single { FoodChangeMoodUI(get(),get()) }
+    single { GetFirstTenMealsUseCase(get()) }
+    single { GetEasyFoodSuggestionsUseCase(get()) }
+    single { GetKetoMealUseCase(get()) }
+    single { IdentifyIraqiMealsUseCase(get()) }
+    single { SearchMealByNameUseCase(get()) }
+    single { GetMealsByDateUseCase(get()) }
+
+    single {
+        FoodChangeMoodUi(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }
