@@ -11,6 +11,7 @@ import org.damascus.presentation.FoodChangeMoodUi
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetKetoMealUseCase
 import org.damascus.useCase.GetMealsByDateUseCase
+import org.damascus.useCase.GetRandomPotatoMealsUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
 import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.utils.CSV_FILE_PATH
@@ -32,9 +33,12 @@ val appModule = module {
     single { IdentifyIraqiMealsUseCase(get()) }
     single { SearchMealByNameUseCase(get()) }
     single { GetMealsByDateUseCase(get()) }
+    single { GetRandomPotatoMealsUseCase(get()) }
 
     single {
         FoodChangeMoodUi(
+            get(),
+            get(),
             get(),
             get(),
             get(),
@@ -45,3 +49,4 @@ val appModule = module {
     }
     single { FoodChangeMoodUi(get(), get(), get(), get(), get(),get()) }
 }
+
