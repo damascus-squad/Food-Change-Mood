@@ -5,13 +5,6 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.*
 import java.util.*
-import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
-import org.damascus.useCase.GetHighCalorieMealUseCase
-import org.damascus.useCase.GetKetoMealUseCase
-import org.damascus.useCase.GetMealsByDateUseCase
-import org.damascus.useCase.GetRandomPotatoMealsUseCase
-import org.damascus.useCase.IdentifyIraqiMealsUseCase
-import org.damascus.useCase.SearchMealByNameUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
@@ -22,8 +15,6 @@ class FoodChangeMoodUi(
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
     private val getRandomMealUseCase: GetRandomMealUseCase,
     private val getMealsByDateUseCase: GetMealsByDateUseCase
-    private val getMealsByDateUseCase: GetMealsByDateUseCase,
-    private val getRandomPotatoMealsUseCase: GetRandomPotatoMealsUseCase
 ) {
 
     fun start() {
@@ -38,12 +29,14 @@ class FoodChangeMoodUi(
                 "Guess Preparation Time of Meal",
                 "Get High Calorie Meal",
                 "Search Meals By Date",
+                "Search Meals By Date",
                 "Display Random 10 Meals That Contain Potato"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { printHighCalorieMeal()},
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
                 { playGuessGame(getRandomMealUseCase.getRandomMeal()) },
@@ -162,7 +155,7 @@ class FoodChangeMoodUi(
     }
 
 
-    private fun showKetoMenu(meals: List<Meal>) {
+    fun showKetoMenu(meals: List<Meal>) {
         val notShownMeals = meals.shuffled().toMutableList()
 
         var suggestion: Meal
