@@ -5,6 +5,7 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.useCase.GetMealsByDateUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
 import org.damascus.useCase.SearchMealByNameUseCase
 
@@ -13,7 +14,8 @@ class FoodChangeMoodUi(
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
-    private val searchMealByNameUseCase: SearchMealByNameUseCase
+    private val searchMealByNameUseCase: SearchMealByNameUseCase,
+    private val getMealsByDateUseCase: GetMealsByDateUseCase
 ) {
 
     fun start() {
@@ -24,8 +26,7 @@ class FoodChangeMoodUi(
                 "Identify iraqi meals",
                 "Easy Food Suggestion",
                 "Display a Keto Diet Meal",
-                "Search Meals",
-                "Get ........",
+                "Search Meals By Date"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
@@ -33,7 +34,7 @@ class FoodChangeMoodUi(
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
-                { }
+                { showMealsForSelectedDate()}
             )
         )
     }
@@ -145,7 +146,7 @@ class FoodChangeMoodUi(
 
 
     private fun getInput() = readLine()?.toIntOrNull()
-
+    private var mealsByDate: List<Meal> = listOf()
     private fun getSearchPhrase(): String {
         while (true) {
             print("Please enter the search phrase: ")
@@ -154,5 +155,75 @@ class FoodChangeMoodUi(
             }
             println("Invalid input, please try again.")
         }
+    }
+
+    private fun showMealsForSelectedDate() {
+        print("\n📅 Enter date (yyyy-MM-dd): ")
+
+        readlnOrNull()?.let { input ->
+            val meals = try {
+                getMealsByDateUseCase(input)
+            } catch (e: IllegalArgumentException) {
+                println("❌ ${e.message}")
+                return
+            } catch (e: NoSuchElementException) {
+                println("⚠️ ${e.message}")
+                return
+            }
+
+            mealsByDate = meals
+            println("\n🍽️ Meals added on $input:")
+            meals.forEach { meal ->
+                println("🔹 [${meal.id}] ${meal.name}")
+            }
+
+            showDetailedMealView()
+        }
+    }
+
+    private fun showDetailedMealView() {
+        if (mealsByDate.isEmpty()) {
+            println("⚠️ No meals found. Please search by date first.")
+            return
+        }
+
+        print("\n🔢 Enter meal ID to see details: ")
+
+        readlnOrNull()?.toIntOrNull()
+            ?.let { id -> mealsByDate.find { it.id == id } }
+            ?.also { meal ->
+                println("\n🍽️ Meal Details: ${meal.name}")
+                println("\n🍽️ Meal Id: ${meal.id}")
+                println("ℹ️ Description: ${meal.description}")
+
+                if (meal.minutes >= 60) {
+                    val hours = meal.minutes / 60
+                    val remainingMinutes = meal.minutes % 60
+                    val timeText = if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
+                    println("⌚ Preparation Time: $timeText")
+                } else {
+                    println("⌚ Preparation Time: ${meal.minutes}m")
+                }
+                println("📅 Submitted On: ${meal.submitted}")
+                println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
+                println("🔢 ${meal.stepsCount} Steps to Prepare:")
+                meal.steps.forEachIndexed { index, step ->
+                    println("  ${index + 1}. $step")
+                }
+
+                println("\n🍏 Nutritional Information:")
+                with(meal.nutrition) {
+                    println("🔸 Calories: $calories kcal")
+                    println("🔸 Total Fat: $totalFat g")
+                    println("🔸 Saturated Fat: $saturatedFat g")
+                    println("🔸 Carbohydrates: $carbohydrates g")
+                    println("🔸 Sugar: $sugar g")
+                    println("🔸 Sodium: $sodium mg")
+                    println("🔸 Protein: $protein g")
+                }
+
+                println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
+            }
+            ?: println("❌ Invalid or non-existing meal ID.")
     }
 }
