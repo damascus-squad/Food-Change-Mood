@@ -9,10 +9,10 @@ import org.koin.java.KoinJavaComponent.getKoin
 fun main() {
     println("Hello World!")
 
-    startKoin{
+    startKoin {
         modules(appModule, useCaseModule)
     }
 
-    val ui : FoodChangeMoodUI = getKoin().get()
+    val ui: FoodChangeMoodUI = getKoin().get()
     ui.start()
 }

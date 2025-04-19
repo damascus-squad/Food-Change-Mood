@@ -2,11 +2,11 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
-import org.damascus.useCase.IngredientGameUseCase
+import org.damascus.useCase.GuessTheIngredientGame
 
 class FoodChangeMoodUI(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val ingredientGameUseCase: IngredientGameUseCase
+    private val guessTheIngredientGame: GuessTheIngredientGame
 ) {
     private fun getInput() = readLine()?.toIntOrNull()
 
@@ -19,7 +19,7 @@ class FoodChangeMoodUI(
             ),
             actions = listOf(
                 { printFirst10Meals() },
-                { playIngredientGame()},
+                { playIngredientGame() },
                 { }
             )
         )
@@ -75,7 +75,6 @@ class FoodChangeMoodUI(
 
     private fun playIngredientGame() {
         println("🎮 Starting the Ingredient Game...")
-        val result = ingredientGameUseCase.playIngredientGame()
-        println(result)
+        guessTheIngredientGame.playIngredientGame()
     }
 }
