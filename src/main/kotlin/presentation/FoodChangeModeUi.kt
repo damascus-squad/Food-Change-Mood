@@ -1,35 +1,56 @@
 package org.damascus.presentation
 
+
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
+import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetKetoMealUseCase
 import org.damascus.useCase.GetMealsByDateUseCase
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
+import org.damascus.useCase.SearchMealByNameUseCase
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getMealsByDateUseCase: GetMealsByDateUseCase,
+    private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val getKetoMealUseCase: GetKetoMealUseCase,
+    private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
+    private val searchMealByNameUseCase: SearchMealByNameUseCase,
+    private val getMealsByDateUseCase: GetMealsByDateUseCase
 ) {
-    private fun getInput() = readLine()?.toIntOrNull()
-    private var mealsByDate: List<Meal> = listOf()
+
     fun start() {
         showMenu(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Get food by date",
-                "Get ........"
+                "Identify iraqi meals",
+                "Easy Food Suggestion",
+                "Display a Keto Diet Meal",
+                "Search Meals By Date"
             ),
             actions = listOf(
-                { printFirst10Meals() },
-                { showMealsForSelectedDate() },
-                { }
+                { printMealsList(getFirstNMealsUseCase()) },
+                { printMealsList(identifyIraqiMealsUseCase.invoke()) },
+                { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { showKetoMenu(getKetoMealUseCase()) },
+                { printSearchResult() },
+                { showMealsForSelectedDate()}
             )
         )
+    }
+
+    private fun printSearchResult() {
+        try {
+            printMealsList(searchMealByNameUseCase(getSearchPhrase()).take(10))
+        } catch (e: Exception) {
+            println(e.message)
+        }
     }
 
     private fun showMenu(
         title: String,
         options: List<String>,
-        actions: List<() -> Unit>,
+        actions: List<() -> Unit>
     ) {
         println("\n=== $title ===")
 
@@ -50,8 +71,14 @@ class FoodChangeMoodUi(
         showMenu(title, options, actions)
     }
 
-    fun printFirst10Meals() {
-        getFirstNMealsUseCase().forEachIndexed { index, meal ->
+
+    /**
+     * This function displays any list of meals
+     * every meal will be displayed as each property in one line
+     * between each meal 2 lines
+     */
+    fun printMealsList(mealsList: List<Meal>) {
+        mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
                         "Name='${meal.name}'\n " +
@@ -70,6 +97,65 @@ class FoodChangeMoodUi(
         }
     }
 
+
+    fun showKetoMenu(meals: List<Meal>) {
+        val notShownMeals = meals.shuffled().toMutableList()
+
+        var suggestion: Meal
+
+        while (true) {
+            if (notShownMeals.isEmpty()) {
+                println("No more keto meals available to suggest.")
+                return
+            }
+
+            suggestion = notShownMeals.removeLast()
+            println(
+                """
+                    Here is your keto meal suggestion:
+                    name        : ${suggestion.name}
+                    description : ${suggestion.description}
+            """.trimIndent()
+            )
+
+            println(
+                """
+                    
+            === Like or Dislike? ===
+            1- Like 👍
+            2- Dislike 👎
+            3- Exit keto ❌
+            """.trimIndent()
+            )
+
+            print("Enter your choice : ")
+            val input = getInput()
+
+            when (input) {
+                1 -> {
+                    printMealsList(listOf(suggestion))
+                    return
+                }
+
+                2 -> continue
+                3 -> return
+                else -> println("Invalid input. Try again.\n")
+            }
+        }
+    }
+
+
+    private fun getInput() = readLine()?.toIntOrNull()
+    private var mealsByDate: List<Meal> = listOf()
+    private fun getSearchPhrase(): String {
+        while (true) {
+            print("Please enter the search phrase: ")
+            readlnOrNull()?.let {
+                return it
+            }
+            println("Invalid input, please try again.")
+        }
+    }
 
     private fun showMealsForSelectedDate() {
         print("\n📅 Enter date (yyyy-MM-dd): ")
