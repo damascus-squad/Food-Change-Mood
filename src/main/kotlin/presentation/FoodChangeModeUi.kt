@@ -19,7 +19,7 @@ class FoodChangeMoodUi(
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
-    private val getRandomMealUseCase: GetRandomMealUseCase
+    private val getRandomMealUseCase: GetRandomMealUseCase,
     private val getMealsByDateUseCase: GetMealsByDateUseCase
 ) {
 
