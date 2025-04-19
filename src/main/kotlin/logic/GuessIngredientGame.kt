@@ -2,14 +2,20 @@ package org.damascus.logic
 
 import org.damascus.model.Meal
 import org.damascus.model.MealOptions
+import org.damascus.useCase.GetMealGameUtilsUseCase
 
 class GuessIngredientGame(
-    private val validMeals: List<Meal>
+    private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase
 ) {
+
+    private val validMeals: List<Meal> = getMealGameUtilsUseCase.getValidMeals { meal: Meal ->
+        meal.ingredients.size >= MIN_NEEDED_TOTAL_INGREDIENTS
+    }
 
     companion object {
         const val MAX_ALLOWED_CORRECT_ANSWERS = 15
         const val MIN_NEEDED_WRONG_INGREDIENTS = 2
+        const val MIN_NEEDED_TOTAL_INGREDIENTS = 3
     }
 
     fun playIngredientGame() {
@@ -25,7 +31,8 @@ class GuessIngredientGame(
 
             val currentRandomMeal = randomMeals[randomMealsIndex]
             val correctIngredient = currentRandomMeal.ingredients.random()
-            val wrongIngredients = getWrongIngredients(currentRandomMeal, correctIngredient)
+            val wrongIngredients =
+                getMealGameUtilsUseCase.getWrongIngredients(validMeals, currentRandomMeal, correctIngredient)
 
             if (wrongIngredients.size < MIN_NEEDED_WRONG_INGREDIENTS) {
                 randomMealsIndex++
@@ -33,7 +40,7 @@ class GuessIngredientGame(
             }
 
             val mealIngredientsOptions = MealOptions(correctIngredient, wrongIngredients)
-            val options = getShuffledOptions(mealIngredientsOptions)
+            val options = getMealGameUtilsUseCase.getShuffledOptions(mealIngredientsOptions)
 
             println("\n🍽️ Meal: ${currentRandomMeal.name}")
             println("🥳 Choose the correct ingredient. Think carefully, or else you'll have to blame your stomach!")
@@ -41,7 +48,7 @@ class GuessIngredientGame(
             options.forEachIndexed { index, option ->
                 println("${index + 1}. $option")
             }
-            println("Your answer (1-3)")
+            print("Your answer (1-3): ")
             val choice = readlnOrNull()?.toIntOrNull()
 
             if (choice == null || choice !in (1..3)) {
@@ -69,23 +76,5 @@ class GuessIngredientGame(
         }
 
     }
-
-    private fun getWrongIngredients(
-        currentRandomMeal: Meal,
-        correctIngredient: String
-    ): List<String> {
-        return validMeals.asSequence()
-            .filter { meal -> meal != currentRandomMeal }
-            .flatMap { meal -> meal.ingredients }
-            .filter { ingredient -> ingredient != correctIngredient }
-            .distinct()
-            .take(MIN_NEEDED_WRONG_INGREDIENTS)
-            .toList()
-    }
-
-    private fun getShuffledOptions(mealOptions: MealOptions): List<String> {
-        return (mealOptions.wrongMealIngredients + mealOptions.correctMealIngredient).shuffled()
-    }
-
 
 }

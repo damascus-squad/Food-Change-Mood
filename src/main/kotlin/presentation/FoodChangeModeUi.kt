@@ -8,7 +8,7 @@ import org.damascus.useCase.*
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getFilteredMealsUseCase: GetFilteredMealsUseCase,
+    private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
@@ -22,11 +22,11 @@ class FoodChangeMoodUi(
             title = "Welcome to our App",
             options = listOf(
                 "Display first 10 meals",
-                "Play Ingredient Game.",
                 "Identify iraqi meals",
                 "Easy Food Suggestion",
                 "Display a Keto Diet Meal",
                 "Search Meals",
+                "Play Ingredient Game",
                 "Get ........",
             ),
             actions = listOf(
@@ -101,11 +101,7 @@ class FoodChangeMoodUi(
 
     private fun playIngredientGame() {
         println("🎮 Starting the Ingredient Game...")
-        val guessIngredientGame = GuessIngredientGame(
-            getFilteredMealsUseCase(
-                predicate = { meal: Meal -> meal.ingredients.size >= 3 }
-            )
-        )
+        val guessIngredientGame = GuessIngredientGame(getMealGameUtilsUseCase)
         guessIngredientGame.playIngredientGame()
     }
 
