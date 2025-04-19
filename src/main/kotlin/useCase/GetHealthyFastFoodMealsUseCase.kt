@@ -1,5 +1,6 @@
 package org.damascus.useCase
 
+import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 import org.damascus.model.NutritionAverages
@@ -26,11 +27,16 @@ class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository
         return NutritionAverages(avgFat, avgSaturatedFat, avgCarbs)
     }
 
+    private infix fun Nutrition.isNutritionallyBetterThan(averages: NutritionAverages): Boolean {
+        return totalFat.let { totalFat -> totalFat < averages.averageFat }
+                && saturatedFat.let { saturatedFat -> saturatedFat < averages.averageSaturatedFat }
+                && carbohydrates.let { carbohydrates -> carbohydrates < averages.averageCarbs }
+    }
+
     private infix fun Meal.isHealthyFastFoodBy(averages: NutritionAverages): Boolean {
-        return minutes <= MAXIMUM_MINUTES_TO_PREPARE_MEAL
-                && nutrition.totalFat < averages.averageFat
-                && nutrition.saturatedFat < averages.averageSaturatedFat
-                && nutrition.carbohydrates < averages.averageCarbs
+        return minutes.let { preparationTime -> preparationTime <= MAXIMUM_MINUTES_TO_PREPARE_MEAL }
+                && nutrition isNutritionallyBetterThan averages
+
     }
 
     companion object {
