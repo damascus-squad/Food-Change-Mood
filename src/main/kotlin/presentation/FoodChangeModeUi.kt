@@ -4,7 +4,7 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.useCase.GetRandomPotatoMealsUseCase
 
-class FoodChangeMoodUI(
+class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getRandomPotatoMealsUseCase: GetRandomPotatoMealsUseCase,
 ) {
