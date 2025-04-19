@@ -9,7 +9,7 @@ class GetWrongIngredientUseCase {
         correctIngredient: String
     ): List<String> {
         val wrongIngredients = validMeal
-            .filter { validMeal -> validMeal == currentRandomMeal }
+            .filter { validMeal -> validMeal != currentRandomMeal }
             .flatMap { validMeal -> validMeal.ingredients }
             .filter { ingredient -> ingredient != correctIngredient }
             .distinct()
