@@ -32,7 +32,7 @@ class GuessIngredientGame(
                 continue
             }
 
-            val mealIngredientsOptions = MealOptions(validMeals, correctIngredient, wrongIngredients)
+            val mealIngredientsOptions = MealOptions(correctIngredient, wrongIngredients)
             val options = getShuffledOptions(mealIngredientsOptions)
 
             println("\n🍽️ Meal: ${currentRandomMeal.name}")

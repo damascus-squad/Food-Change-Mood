@@ -6,7 +6,7 @@ import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
 import org.damascus.useCase.GetFilteredMealsUseCase
 
-class FoodChangeMoodUI(
+class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getFilteredMealsUseCase: GetFilteredMealsUseCase
 ) {
