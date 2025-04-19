@@ -1,21 +1,25 @@
 package org.damascus.di
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.useCase.GetMealsByDateUseCase
+
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetEggFreeSweetUseCase
+import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
 import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.useCase.GetKetoMealUseCase
 import org.koin.dsl.module
+
 
 val useCaseModule = module {
     single { GetFirstTenMealsUseCase(get() ) }
     single { GetEasyFoodSuggestionsUseCase(get() ) }
     single { GetEggFreeSweetUseCase(get()) }
     single { IdentifyIraqiMealsUseCase(get()) }
-    single { GetFirstTenMealsUseCase(get()) }
-    single { IdentifyIraqiMealsUseCase(get()) }
-    single { GetEasyFoodSuggestionsUseCase(get()) }
+    single { GetMealsByDateUseCase(get())}
     single { SearchMealByNameUseCase(get()) }
     single { GetKetoMealUseCase(get()) }
+    single { GuessMealUseCase(get() ) }
+    single { GetHighCalorieMealUseCase(get()) }
 }
