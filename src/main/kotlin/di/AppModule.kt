@@ -8,14 +8,9 @@ import org.damascus.data.source.CsvMealDataSource
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.logic.MealRepository
 import org.damascus.presentation.FoodChangeMoodUi
-import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
-import org.damascus.useCase.GetKetoMealUseCase
-import org.damascus.useCase.GetMealsByDateUseCase
-import org.damascus.useCase.IdentifyIraqiMealsUseCase
-import org.damascus.useCase.SearchMealByNameUseCase
+import org.damascus.useCase.*
 import org.damascus.utils.CSV_FILE_PATH
 import org.koin.dsl.module
-
 import java.io.File
 
 val appModule = module {

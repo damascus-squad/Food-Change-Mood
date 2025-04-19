@@ -2,6 +2,7 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetEggFreeSweetUseCase
@@ -13,6 +14,7 @@ import java.util.*
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
+    private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase,
     private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase,
@@ -22,6 +24,8 @@ class FoodChangeMoodUi(
     private val getRandomMealUseCase: GetRandomMealUseCase,
     private val getMealsByDateUseCase: GetMealsByDateUseCase
 ) {
+    private fun getInput() = readLine()?.toIntOrNull()
+
 
     fun start() {
         showMenu(
@@ -35,6 +39,7 @@ class FoodChangeMoodUi(
                 "Guess Preparation Time of Meal",
                 "Get High Calorie Meal",
                 "Search Meals By Date",
+                "Play Ingredient Game",
                 "Search Meals By Date",
                 "Display Random 10 Meals That Contain Potato",
                 "Get Egg-Free Sweet",
@@ -50,6 +55,8 @@ class FoodChangeMoodUi(
                 { printSearchResult() },
                 { playGuessGame(getRandomMealUseCase.getRandomMeal()) },
                 { showMealsForSelectedDate()},
+                { playIngredientGame() },
+                { }
             )
         )
     }
@@ -185,6 +192,11 @@ class FoodChangeMoodUi(
         println("IngredientsCount: ${meal.ingredientsCount}")
     }
 
+    private fun playIngredientGame() {
+        println("🎮 Starting the Ingredient Game...")
+        val guessIngredientGame = GuessIngredientGame(getMealGameUtilsUseCase)
+        guessIngredientGame.playIngredientGame()
+    }
 
     fun showKetoMenu(meals: List<Meal>) {
         val notShownMeals = meals.shuffled().toMutableList()
@@ -233,7 +245,6 @@ class FoodChangeMoodUi(
     }
 
 
-    private fun getInput() = readLine()?.toIntOrNull()
     private var mealsByDate: List<Meal> = listOf()
     private fun getSearchPhrase(): String {
         while (true) {
