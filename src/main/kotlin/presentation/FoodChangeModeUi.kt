@@ -4,11 +4,6 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
-import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
-import org.damascus.useCase.GetEggFreeSweetUseCase
-import org.damascus.useCase.GetKetoMealUseCase
-import org.damascus.useCase.IdentifyIraqiMealsUseCase
-import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.useCase.*
 import java.util.*
 
@@ -22,43 +17,158 @@ class FoodChangeMoodUi(
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
     private val getRandomMealUseCase: GetRandomMealUseCase,
-    private val getMealsByDateUseCase: GetMealsByDateUseCase
+    private val getMealsByDateUseCase: GetMealsByDateUseCase,
+    private val getItalianLargeGroupMealsUseCase: GetItalianLargeGroupMealsUseCase,
+    private val sortSeafoodMealsByContentUSeCase: SortSeafoodMealsByContentUseCase,
+    private val getHealthyFastFoodMealsUseCase: GetHealthyFastFoodMealsUseCase,
+    private val exploreOtherCountriesFoodUseCase: ExploreOtherCountriesFoodUseCase,
+    private val getRandomPotatoMealsUseCase: GetRandomPotatoMealsUseCase,
+    private val findMealsByCaloriesAndProtein: FindMealsByCaloriesAndProtein
 ) {
-    private fun getInput() = readLine()?.toIntOrNull()
-
+    private fun getInput() = readlnOrNull()?.toIntOrNull()
 
     fun start() {
         showMenu(
-            title = "Welcome to our App",
-            options = listOf(
-                "Display first 10 meals",
-                "Identify iraqi meals",
-                "Easy Food Suggestion",
-                "Display a Keto Diet Meal",
-                "Search Meals",
-                "Guess Preparation Time of Meal",
-                "Get High Calorie Meal",
-                "Search Meals By Date",
-                "Play Ingredient Game",
-                "Search Meals By Date",
-                "Display Random 10 Meals That Contain Potato",
-                "Get Egg-Free Sweet",
-                "Get ........",
-            ),
-            actions = listOf(
-                { printMealsList(getFirstNMealsUseCase()) },
-                { printMealsList(identifyIraqiMealsUseCase.invoke()) },
-                { printMealsList(getEasyFoodSuggestionsUseCase()) },
-                { printEggFreeSweet()},
-                { printHighCalorieMeal()},
-                { showKetoMenu(getKetoMealUseCase()) },
-                { printSearchResult() },
-                { playGuessGame(getRandomMealUseCase.getRandomMeal()) },
-                { showMealsForSelectedDate()},
-                { playIngredientGame() },
-                { }
+            uiActionList = listOf(
+                UiAction(
+                    name = "Identify iraqi meals",
+                    action = { printMealsList(identifyIraqiMealsUseCase.invoke()) }
+                ),
+                UiAction(
+                    name = "Search Meals By Date",
+                    action = { showMealsForSelectedDate() }
+                ),
+                UiAction(
+                    name = "Play Ingredient Game",
+                    action = { playIngredientGame() }
+                ),
+                UiAction(
+                    name = "Play Guess Meal Game",
+                    action = { playGuessGame(getRandomMealUseCase.getRandomMeal()) }
+                ),
+                UiAction(
+                    name = "Search Meals by Name",
+                    action = { printSearchResult() }
+                ),
+                UiAction(
+                    name = "Display a Keto Diet Meal",
+                    action = { showKetoMenu(getKetoMealUseCase()) }
+                ),
+                UiAction(
+                    name = "Show High Calorie Meals",
+                    action = { printHighCalorieMeal() }
+                ),
+                UiAction(
+                    name = "Get Egg-Free Sweet",
+                    action = { printEggFreeSweet() }
+                ),
+                UiAction(
+                    name = "Easy Food Suggestion",
+                    action = { printMealsList(getEasyFoodSuggestionsUseCase()) }
+                ),
+                UiAction(
+                    name = "Display first 10 meals",
+                    action = { printMealsList(getFirstNMealsUseCase()) }
+                ),
+                UiAction(
+                    name = "Display Random 10 Meals That Contain Potato",
+                    action = { getPotatoMeals() }
+                ),
+                UiAction(
+                    name = "Explore Country Meals",
+                    action = {
+                        val country = promptForCountry()
+                        val result = exploreOtherCountriesFoodUseCase.getCountryFood(country, limit = 20)
+                        displayCountryMeals(result, country)
+                    }
+                ),
+                UiAction(
+                    name = "Display Italian Meals",
+                    action = { printMealsList(getItalianLargeGroupMealsUseCase()) }
+                ),
+                UiAction(
+                    name = "Display Healthy Meals",
+                    action = { printHealthyMeals() }
+                ),
+                UiAction(
+                    name = "Display Seafood Meals",
+                    action = { printSeafoodMeals() }
+                ),
+                UiAction(
+                    name = "Find meals by calories and protein",
+                    action = { printMealsByCaloriesAndProtein() }
+                )
             )
         )
+    }
+
+    private fun printMealsByCaloriesAndProtein() {
+
+        val targetCalories: Double = getInputs("Enter Calories amount: ")
+        val targetProtein: Double = getInputs("Enter Protein amount: ")
+
+        val result: List<Meal> =
+            findMealsByCaloriesAndProtein(targetCalories = targetCalories, targetProtein = targetProtein)
+
+        println("Found (${result.size}) meals")
+        result.forEach { it ->
+            println("Calories: ${it.nutrition.calories}, Protein: ${it.nutrition.protein} | Meal name: ${it.name}")
+        }
+    }
+
+    private fun getInputs(title: String): Double {
+        print(title)
+        var userInput: Double? = readLine()?.toDoubleOrNull()
+        while (userInput == null) {
+            print("Wrong input: ")
+            userInput = readLine()?.toDoubleOrNull()
+        }
+        return userInput
+    }
+
+    private fun promptForCountry(): String {
+        while (true) {
+            println("🌍 Enter the country name:")
+            val input = readlnOrNull()?.trim().orEmpty()
+            if (input.isNotBlank()) {
+                return input
+            }
+            println("❌ Country name cannot be empty. Please try again.")
+        }
+    }
+
+    private fun displayCountryMeals(meals: List<Meal>, country: String) {
+        if (meals.isEmpty()) {
+            println("No Meals Found for this $country")
+            return
+        }
+        println("✅ Found ${meals.size} meal(s) for '$country'. Showing ${meals.size}:\n")
+        meals.forEachIndexed { index, meal ->
+            println("🍽 #${index + 1}: ${meal.name}")
+            println("—".repeat(40))
+        }
+    }
+
+    private fun printHealthyMeals() {
+        val healthyMeals = getHealthyFastFoodMealsUseCase()
+        if (healthyMeals.isEmpty()) {
+            println("No healthy meals available.")
+        } else {
+            healthyMeals.forEachIndexed { index, mealName ->
+                println("Healthy Meal ${index + 1}: $mealName")
+            }
+        }
+    }
+
+    private fun printSeafoodMeals() {
+        val seafoodMeals = sortSeafoodMealsByContentUSeCase()
+        if (seafoodMeals.isEmpty()) {
+            println("No seafood meals available")
+            return
+        }
+        seafoodMeals.forEachIndexed { index, meal ->
+            println("Meal ${index + 1} : ${meal.name} - Protein Content : ${meal.nutrition.protein}g ")
+        }
     }
 
     private fun printSearchResult() {
@@ -70,36 +180,35 @@ class FoodChangeMoodUi(
     }
 
     private fun showMenu(
-        title: String,
-        options: List<String>,
-        actions: List<() -> Unit>
+        title: String = "Welcome to our App",
+        uiActionList: List<UiAction>
     ) {
-        println("\n=== $title ===")
+        while (true) {
+            println("\n=== $title ===")
 
-        options.forEachIndexed { index, option ->
-            println("${index + 1}- $option")
+            uiActionList.forEachIndexed { index, action ->
+                println("${index + 1}- ${action.name}")
+            }
+
+            print("Enter your choice: (0 to exit): ")
+            val input = getInput()
+
+            if (input == 0) {
+                return
+            } else if (input == null || input !in 1..uiActionList.size) {
+                println("Invalid input. Try again.\n")
+            } else {
+                uiActionList[input - 1].action()
+            }
         }
-
-        print("Enter your choice: (0 to exit): ")
-        val input = getInput()
-
-        if (input == 0) {
-            return
-        } else if (input == null || input !in 1..options.size) {
-            println("Invalid input. Try again.\n")
-        } else {
-            actions[input - 1]()
-        }
-        showMenu(title, options, actions)
     }
-
 
     /**
      * This function displays any list of meals
      * every meal will be displayed as each property in one line
      * between each meal 2 lines
      */
-    fun printMealsList(mealsList: List<Meal>) {
+    private fun printMealsList(mealsList: List<Meal>) {
         mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
@@ -119,7 +228,7 @@ class FoodChangeMoodUi(
         }
     }
 
-    fun printEggFreeSweet() {
+    private fun printEggFreeSweet() {
         while (true) {
             try {
                 val meal = getEggFreeSweetUseCase()
@@ -141,8 +250,7 @@ class FoodChangeMoodUi(
         }
     }
 
-
-    fun printHighCalorieMeal() {
+    private fun printHighCalorieMeal() {
         while (true) {
             try {
                 val meals = getHighCalorieMealUseCase()
@@ -168,7 +276,6 @@ class FoodChangeMoodUi(
             }
         }
     }
-
 
     private fun askUserToLike(): Boolean {
         print("Do you like it? (y/n): ")
@@ -198,7 +305,7 @@ class FoodChangeMoodUi(
         guessIngredientGame.playIngredientGame()
     }
 
-    fun showKetoMenu(meals: List<Meal>) {
+    private fun showKetoMenu(meals: List<Meal>) {
         val notShownMeals = meals.shuffled().toMutableList()
 
         var suggestion: Meal
@@ -244,8 +351,6 @@ class FoodChangeMoodUi(
         }
     }
 
-
-    private var mealsByDate: List<Meal> = listOf()
     private fun getSearchPhrase(): String {
         while (true) {
             print("Please enter the search phrase: ")
@@ -290,6 +395,8 @@ class FoodChangeMoodUi(
 
         println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.")
     }
+
+    private var mealsByDate: List<Meal> = listOf()
 
     private fun showMealsForSelectedDate() {
         print("\n📅 Enter date (yyyy-MM-dd): ")
@@ -359,6 +466,47 @@ class FoodChangeMoodUi(
                 println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
             }
             ?: println("❌ Invalid or non-existing meal ID.")
+    }
+
+    private fun getPotatoMeals() {
+        getRandomPotatoMealsUseCase().forEachIndexed { index, meal ->
+
+            println("\n Meal: ${index + 1}")
+            println("\n🍽️ Meal Details: ${meal.name}")
+            println("\n🍽️ Meal Id: ${meal.id}")
+            println("ℹ️ Description: ${meal.description}")
+
+            if (meal.minutes >= 60) {
+                val hours = meal.minutes / 60
+                val remainingMinutes = meal.minutes % 60
+                val timeText = if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
+                println("⌚ Preparation Time: $timeText")
+            } else {
+                println("⌚ Preparation Time: ${meal.minutes}m")
+            }
+
+            println("📅 Submitted On: ${meal.submitted}")
+            println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
+            println("🔢 ${meal.stepsCount} Steps to Prepare:")
+            meal.steps.forEachIndexed { idx, step ->
+                println("  ${idx + 1}. $step")
+            }
+
+            println("\n🍏 Nutritional Information:")
+            with(meal.nutrition) {
+                println("🔸 Calories: $calories kcal")
+                println("🔸 Total Fat: $totalFat g")
+                println("🔸 Saturated Fat: $saturatedFat g")
+                println("🔸 Carbohydrates: $carbohydrates g")
+                println("🔸 Sugar: $sugar g")
+                println("🔸 Sodium: $sodium mg")
+                println("🔸 Protein: $protein g")
+            }
+
+            println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
+            println("-".repeat(50))
+        }
+
     }
 
 }
