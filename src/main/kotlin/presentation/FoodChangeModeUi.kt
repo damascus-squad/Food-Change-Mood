@@ -5,6 +5,8 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
 import org.damascus.useCase.*
+import org.damascus.utils.TerminalColor
+import org.damascus.utils.withStyle
 import java.util.*
 
 class FoodChangeMoodUi(
@@ -31,51 +33,51 @@ class FoodChangeMoodUi(
         showMenu(
             uiActionList = listOf(
                 UiAction(
-                    name = "Identify iraqi meals",
-                    action = { printMealsList(identifyIraqiMealsUseCase.invoke()) }
+                    name = "Identify iraqi meals".withStyle(TerminalColor.Green),
+                    action = { printMealsList(identifyIraqiMealsUseCase()) }
                 ),
                 UiAction(
-                    name = "Search Meals By Date",
+                    name = "Search Meals By Date".withStyle(TerminalColor.Green),
                     action = { showMealsForSelectedDate() }
                 ),
                 UiAction(
-                    name = "Play Ingredient Game",
+                    name = "Play Ingredient Game".withStyle(TerminalColor.Green),
                     action = { playIngredientGame() }
                 ),
                 UiAction(
-                    name = "Play Guess Meal Game",
+                    name = "Play Guess Meal Game".withStyle(TerminalColor.Green),
                     action = { playGuessGame(getRandomMealUseCase.getRandomMeal()) }
                 ),
                 UiAction(
-                    name = "Search Meals by Name",
+                    name = "Search Meals by Name".withStyle(TerminalColor.Green),
                     action = { printSearchResult() }
                 ),
                 UiAction(
-                    name = "Display a Keto Diet Meal",
+                    name = "Display a Keto Diet Meal".withStyle(TerminalColor.Green),
                     action = { showKetoMenu(getKetoMealUseCase()) }
                 ),
                 UiAction(
-                    name = "Show High Calorie Meals",
+                    name = "Show High Calorie Meals".withStyle(TerminalColor.Green),
                     action = { printHighCalorieMeal() }
                 ),
                 UiAction(
-                    name = "Get Egg-Free Sweet",
+                    name = "Get Egg-Free Sweet".withStyle(TerminalColor.Green),
                     action = { printEggFreeSweet() }
                 ),
                 UiAction(
-                    name = "Easy Food Suggestion",
+                    name = "Easy Food Suggestion".withStyle(TerminalColor.Green),
                     action = { printMealsList(getEasyFoodSuggestionsUseCase()) }
                 ),
                 UiAction(
-                    name = "Display first 10 meals",
+                    name = "Display first 10 meals".withStyle(TerminalColor.Green),
                     action = { printMealsList(getFirstNMealsUseCase()) }
                 ),
                 UiAction(
-                    name = "Display Random 10 Meals That Contain Potato",
+                    name = "Display Random 10 Meals That Contain Potato".withStyle(TerminalColor.Green),
                     action = { getPotatoMeals() }
                 ),
                 UiAction(
-                    name = "Explore Country Meals",
+                    name = "Explore Country Meals".withStyle(TerminalColor.Green),
                     action = {
                         val country = promptForCountry()
                         val result = exploreOtherCountriesFoodUseCase.getCountryFood(country, limit = 20)
@@ -83,19 +85,19 @@ class FoodChangeMoodUi(
                     }
                 ),
                 UiAction(
-                    name = "Display Italian Meals",
+                    name = "Display Italian Meals".withStyle(TerminalColor.Green),
                     action = { printMealsList(getItalianLargeGroupMealsUseCase()) }
                 ),
                 UiAction(
-                    name = "Display Healthy Meals",
+                    name = "Display Healthy Meals".withStyle(TerminalColor.Green),
                     action = { printHealthyMeals() }
                 ),
                 UiAction(
-                    name = "Display Seafood Meals",
+                    name = "Display Seafood Meals".withStyle(TerminalColor.Green),
                     action = { printSeafoodMeals() }
                 ),
                 UiAction(
-                    name = "Find meals by calories and protein",
+                    name = "Find meals by calories and protein".withStyle(TerminalColor.Green),
                     action = { printMealsByCaloriesAndProtein() }
                 )
             )
@@ -104,15 +106,15 @@ class FoodChangeMoodUi(
 
     private fun printMealsByCaloriesAndProtein() {
 
-        val targetCalories: Double = getInputs("Enter Calories amount: ")
-        val targetProtein: Double = getInputs("Enter Protein amount: ")
+        val targetCalories: Double = getInputs("Enter Calories amount: ".withStyle(TerminalColor.Blue))
+        val targetProtein: Double = getInputs("Enter Protein amount: ".withStyle(TerminalColor.Blue))
 
         val result: List<Meal> =
             findMealsByCaloriesAndProtein(targetCalories = targetCalories, targetProtein = targetProtein)
 
         println("Found (${result.size}) meals")
         result.forEach { it ->
-            println("Calories: ${it.nutrition.calories}, Protein: ${it.nutrition.protein} | Meal name: ${it.name}")
+            println("Calories: ${it.nutrition.calories}, Protein: ${it.nutrition.protein} | Meal name: ${it.name}".withStyle(TerminalColor.Green))
         }
     }
 
@@ -120,7 +122,7 @@ class FoodChangeMoodUi(
         print(title)
         var userInput: Double? = readLine()?.toDoubleOrNull()
         while (userInput == null) {
-            print("Wrong input: ")
+            print("Wrong input: ".withStyle(TerminalColor.Red))
             userInput = readLine()?.toDoubleOrNull()
         }
         return userInput
@@ -128,34 +130,34 @@ class FoodChangeMoodUi(
 
     private fun promptForCountry(): String {
         while (true) {
-            println("🌍 Enter the country name:")
+            println("🌍 Enter the country name:".withStyle(TerminalColor.Blue))
             val input = readlnOrNull()?.trim().orEmpty()
             if (input.isNotBlank()) {
                 return input
             }
-            println("❌ Country name cannot be empty. Please try again.")
+            println("❌ Country name cannot be empty. Please try again.".withStyle(TerminalColor.Red))
         }
     }
 
     private fun displayCountryMeals(meals: List<Meal>, country: String) {
         if (meals.isEmpty()) {
-            println("No Meals Found for this $country")
+            println("No Meals Found for this $country".withStyle(TerminalColor.Yellow))
             return
         }
-        println("✅ Found ${meals.size} meal(s) for '$country'. Showing ${meals.size}:\n")
+        println("✅ Found ${meals.size} meal(s) for '$country'. Showing ${meals.size}:\n".withStyle(TerminalColor.Green))
         meals.forEachIndexed { index, meal ->
-            println("🍽 #${index + 1}: ${meal.name}")
-            println("—".repeat(40))
+            println("🍽 #${index + 1}: ${meal.name}".withStyle(TerminalColor.Green))
+            println("—".repeat(40).withStyle(TerminalColor.Magenta))
         }
     }
 
     private fun printHealthyMeals() {
         val healthyMeals = getHealthyFastFoodMealsUseCase()
         if (healthyMeals.isEmpty()) {
-            println("No healthy meals available.")
+            println("No healthy meals available.".withStyle(TerminalColor.Cyan))
         } else {
             healthyMeals.forEachIndexed { index, mealName ->
-                println("Healthy Meal ${index + 1}: $mealName")
+                println("Healthy Meal ${index + 1}: $mealName".withStyle(TerminalColor.Green))
             }
         }
     }
@@ -163,11 +165,11 @@ class FoodChangeMoodUi(
     private fun printSeafoodMeals() {
         val seafoodMeals = sortSeafoodMealsByContentUSeCase()
         if (seafoodMeals.isEmpty()) {
-            println("No seafood meals available")
+            println("No seafood meals available".withStyle(TerminalColor.Cyan))
             return
         }
         seafoodMeals.forEachIndexed { index, meal ->
-            println("Meal ${index + 1} : ${meal.name} - Protein Content : ${meal.nutrition.protein}g ")
+            println("Meal ${index + 1} : ${meal.name} - Protein Content : ${meal.nutrition.protein} ".withStyle(TerminalColor.Green))
         }
     }
 
@@ -180,7 +182,7 @@ class FoodChangeMoodUi(
     }
 
     private fun showMenu(
-        title: String = "Welcome to our App",
+        title: String = "Welcome to our App".withStyle(TerminalColor.Blue),
         uiActionList: List<UiAction>
     ) {
         while (true) {
@@ -190,13 +192,13 @@ class FoodChangeMoodUi(
                 println("${index + 1}- ${action.name}")
             }
 
-            print("Enter your choice: (0 to exit): ")
+            print("Enter your choice: (0 to exit): ".withStyle(TerminalColor.Cyan))
             val input = getInput()
 
             if (input == 0) {
                 return
             } else if (input == null || input !in 1..uiActionList.size) {
-                println("Invalid input. Try again.\n")
+                println("Invalid input. Try again.\n".withStyle(TerminalColor.Red))
             } else {
                 uiActionList[input - 1].action()
             }
@@ -212,18 +214,18 @@ class FoodChangeMoodUi(
         mealsList.forEachIndexed { index, meal ->
             println(
                 "Meal ${index + 1}: " +
-                        "Name='${meal.name}'\n " +
-                        "ID=${meal.id}\n " +
-                        "Minutes=${meal.minutes}\n " +
-                        "ContributorID=${meal.contributorId}\n " +
-                        "Submitted='${meal.submitted}\n, " +
-                        "Tags=${meal.tags}\n " +
-                        "Nutrition=${meal.nutrition}\n " +
-                        "StepsCount=${meal.stepsCount}\n " +
-                        "Steps=${meal.steps}\n " +
-                        "Description='${meal.description.take(30)}...'\n " +
-                        "Ingredients=${meal.ingredients}\n " +
-                        "IngredientsCount=${meal.ingredientsCount}\n\n"
+                        "Name='${meal.name}'\n ".withStyle(TerminalColor.Green) +
+                        "ID=${meal.id}\n ".withStyle(TerminalColor.Green) +
+                        "Minutes=${meal.minutes}\n ".withStyle(TerminalColor.Green) +
+                        "ContributorID=${meal.contributorId}\n ".withStyle(TerminalColor.Green) +
+                        "Submitted='${meal.submitted}\n, ".withStyle(TerminalColor.Green) +
+                        "Tags=${meal.tags}\n ".withStyle(TerminalColor.Green) +
+                        "Nutrition=${meal.nutrition}\n ".withStyle(TerminalColor.Green) +
+                        "StepsCount=${meal.stepsCount}\n ".withStyle(TerminalColor.Green) +
+                        "Steps=${meal.steps}\n ".withStyle(TerminalColor.Green) +
+                        "Description='${meal.description.take(30)}...'\n ".withStyle(TerminalColor.Green) +
+                        "Ingredients=${meal.ingredients}\n ".withStyle(TerminalColor.Green) +
+                        "IngredientsCount=${meal.ingredientsCount}\n\n".withStyle(TerminalColor.Green)
             )
         }
     }
@@ -232,19 +234,19 @@ class FoodChangeMoodUi(
         while (true) {
             try {
                 val meal = getEggFreeSweetUseCase()
-                println("\nEgg-Free Sweet")
-                println("Name: ${meal.name}")
-                println("Description: ${meal.description.take(150)}...")
+                println("\nEgg-Free Sweet".withStyle(TerminalColor.Blue))
+                println("Name: ${meal.name}".withStyle(TerminalColor.Blue))
+                println("Description: ${meal.description.take(150)}...".withStyle(TerminalColor.Blue))
 
                 if (askUserToLike()) {
                     printMealsList(getFirstNMealsUseCase())
                     return
                 } else {
-                    println("Fetching another one...")
+                    println("Fetching another one...".withStyle(TerminalColor.Red))
                 }
 
             } catch (e: NoSuchElementException) {
-                println("Error: ${e.message}")
+                println("Error: ${e.message}".withStyle(TerminalColor.Red))
                 return
             }
         }
@@ -256,51 +258,51 @@ class FoodChangeMoodUi(
                 val meals = getHighCalorieMealUseCase()
 
                 for (meal in meals) {
-                    println("\nHigh Calorie Meal")
-                    println("Name: ${meal.name}")
-                    println("Calories: ${meal.nutrition.calories}")
-                    println("Description: ${meal.description.take(150)}...")
+                    println("\nHigh Calorie Meal".withStyle(TerminalColor.Blue))
+                    println("Name: ${meal.name}".withStyle(TerminalColor.Blue))
+                    println("Calories: ${meal.nutrition.calories}".withStyle(TerminalColor.Blue))
+                    println("Description: ${meal.description.take(150)}...".withStyle(TerminalColor.Blue))
 
                     if (askUserToLike()) {
                         printMealDetails(meal)
                         return
                     } else {
-                        println("Skipping...")
+                        println("Skipping...".withStyle(TerminalColor.Green))
                         continue
                     }
                 }
 
             } catch (e: NoSuchElementException) {
-                println("No more high-calorie meals to show.")
+                println("No more high-calorie meals to show.".withStyle(TerminalColor.Red))
                 return
             }
         }
     }
 
     private fun askUserToLike(): Boolean {
-        print("Do you like it? (y/n): ")
+        print("Do you like it? (y/n): ".withStyle(TerminalColor.Green))
         return when (readlnOrNull()?.trim()?.lowercase()) {
             "y" -> true
             "n" -> false
             else -> {
-                println("Invalid input. Please enter 'y' or 'n'.")
+                println("Invalid input. Please enter 'y' or 'n'.".withStyle(TerminalColor.Red))
                 askUserToLike()
             }
         }
     }
 
     private fun printMealDetails(meal: Meal) {
-        println("Minutes: ${meal.minutes}")
-        println("Submitted: ${meal.submitted}")
-        println("Nutrition: ${meal.nutrition}")
-        println("StepsCount: ${meal.stepsCount}")
-        println("Steps: ${meal.steps}")
-        println("Ingredients: ${meal.ingredients}")
-        println("IngredientsCount: ${meal.ingredientsCount}")
+        println("Minutes: ${meal.minutes}".withStyle(TerminalColor.Green))
+        println("Submitted: ${meal.submitted}".withStyle(TerminalColor.Green))
+        println("Nutrition: ${meal.nutrition}".withStyle(TerminalColor.Green))
+        println("StepsCount: ${meal.stepsCount}".withStyle(TerminalColor.Green))
+        println("Steps: ${meal.steps}".withStyle(TerminalColor.Green))
+        println("Ingredients: ${meal.ingredients}".withStyle(TerminalColor.Green))
+        println("IngredientsCount: ${meal.ingredientsCount}".withStyle(TerminalColor.Green))
     }
 
     private fun playIngredientGame() {
-        println("🎮 Starting the Ingredient Game...")
+        println("🎮 Starting the Ingredient Game...".withStyle(TerminalColor.Blue))
         val guessIngredientGame = GuessIngredientGame(getMealGameUtilsUseCase)
         guessIngredientGame.playIngredientGame()
     }
@@ -312,7 +314,7 @@ class FoodChangeMoodUi(
 
         while (true) {
             if (notShownMeals.isEmpty()) {
-                println("No more keto meals available to suggest.")
+                println("No more keto meals available to suggest.".withStyle(TerminalColor.Red))
                 return
             }
 
@@ -322,7 +324,7 @@ class FoodChangeMoodUi(
                     Here is your keto meal suggestion:
                     name        : ${suggestion.name}
                     description : ${suggestion.description}
-            """.trimIndent()
+            """.trimIndent().withStyle(TerminalColor.Green)
             )
 
             println(
@@ -332,10 +334,10 @@ class FoodChangeMoodUi(
             1- Like 👍
             2- Dislike 👎
             3- Exit keto ❌
-            """.trimIndent()
+            """.trimIndent().withStyle(TerminalColor.Yellow)
             )
 
-            print("Enter your choice : ")
+            print("Enter your choice : ".withStyle(TerminalColor.Blue))
             val input = getInput()
 
             when (input) {
@@ -346,60 +348,60 @@ class FoodChangeMoodUi(
 
                 2 -> continue
                 3 -> return
-                else -> println("Invalid input. Try again.\n")
+                else -> println("Invalid input. Try again.\n".withStyle(TerminalColor.Red))
             }
         }
     }
 
     private fun getSearchPhrase(): String {
         while (true) {
-            print("Please enter the search phrase: ")
+            print("Please enter the search phrase: ".withStyle(TerminalColor.Blue))
             readlnOrNull()?.let {
                 return it
             }
-            println("Invalid input, please try again.")
+            println("Invalid input, please try again.".withStyle(TerminalColor.Red))
         }
 
     }
 
     private fun playGuessGame(meal: Meal) {
-        println("🎮 Welcome to the Guess Game!")
-        println("Meal name: ${meal.name}")
-        println("Guess the preparation time in minutes (you have 3 attempts)")
+        println("🎮 Welcome to the Guess Game!".withStyle(TerminalColor.Blue))
+        println("Meal name: ${meal.name}".withStyle(TerminalColor.Green))
+        println("Guess the preparation time in minutes (you have 3 attempts)".withStyle(TerminalColor.Blue))
 
         val scanner = Scanner(System.`in`)
         var attempts = 3
 
         while (attempts > 0) {
-            print("Enter your guess: ")
+            print("Enter your guess: ".withStyle(TerminalColor.Blue))
             val guess = scanner.nextLine().toIntOrNull()
 
             if (guess == null) {
-                println("⚠️ Please enter a valid number.")
+                println("⚠️ Please enter a valid number.".withStyle(TerminalColor.Red))
                 continue
             }
 
             when {
                 guess == meal.minutes -> {
-                    println("✅ Correct! The preparation time is ${meal.minutes} minutes.")
+                    println("✅ Correct! The preparation time is ${meal.minutes} minutes.".withStyle(TerminalColor.Green))
                     return
                 }
 
-                guess < meal.minutes -> println("⬆️ Your guess is too low.")
-                else -> println("⬇️ Your guess is too high.")
+                guess < meal.minutes -> println("⬆️ Your guess is too low.".withStyle(TerminalColor.Green))
+                else -> println("⬇️ Your guess is too high.".withStyle(TerminalColor.Green))
             }
 
             attempts--
-            if (attempts > 0) println("📌 You have $attempts attempt(s) left.")
+            if (attempts > 0) println("📌 You have $attempts attempt(s) left.".withStyle(TerminalColor.Red))
         }
 
-        println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.")
+        println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.".withStyle(TerminalColor.Red))
     }
 
     private var mealsByDate: List<Meal> = listOf()
 
     private fun showMealsForSelectedDate() {
-        print("\n📅 Enter date (yyyy-MM-dd): ")
+        print("\n📅 Enter date (yyyy-MM-dd): ".withStyle(TerminalColor.Green))
 
         readlnOrNull()?.let { input ->
             val meals = try {
@@ -413,9 +415,9 @@ class FoodChangeMoodUi(
             }
 
             mealsByDate = meals
-            println("\n🍽️ Meals added on $input:")
+            println("\n🍽️ Meals added on $input:".withStyle(TerminalColor.Blue))
             meals.forEach { meal ->
-                println("🔹 [${meal.id}] ${meal.name}")
+                println("🔹 [${meal.id}] ${meal.name}".withStyle(TerminalColor.Green))
             }
 
             showDetailedMealView()
@@ -424,69 +426,69 @@ class FoodChangeMoodUi(
 
     private fun showDetailedMealView() {
         if (mealsByDate.isEmpty()) {
-            println("⚠️ No meals found. Please search by date first.")
+            println("⚠️ No meals found. Please search by date first.".withStyle(TerminalColor.Blue))
             return
         }
 
-        print("\n🔢 Enter meal ID to see details: ")
+        print("\n🔢 Enter meal ID to see details: ".withStyle(TerminalColor.Blue))
 
         readlnOrNull()?.toIntOrNull()
             ?.let { id -> mealsByDate.find { it.id == id } }
             ?.also { meal ->
-                println("\n🍽️ Meal Details: ${meal.name}")
-                println("\n🍽️ Meal Id: ${meal.id}")
-                println("ℹ️ Description: ${meal.description}")
+                println("\n🍽️ Meal Details: ${meal.name}".withStyle(TerminalColor.Green))
+                println("\n🍽️ Meal Id: ${meal.id}".withStyle(TerminalColor.Green))
+                println("ℹ️ Description: ${meal.description}".withStyle(TerminalColor.Green))
 
                 if (meal.minutes >= 60) {
                     val hours = meal.minutes / 60
                     val remainingMinutes = meal.minutes % 60
                     val timeText = if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
-                    println("⌚ Preparation Time: $timeText")
+                    println("⌚ Preparation Time: $timeText".withStyle(TerminalColor.Cyan))
                 } else {
-                    println("⌚ Preparation Time: ${meal.minutes}m")
+                    println("⌚ Preparation Time: ${meal.minutes}m".withStyle(TerminalColor.Cyan))
                 }
-                println("📅 Submitted On: ${meal.submitted}")
-                println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
-                println("🔢 ${meal.stepsCount} Steps to Prepare:")
+                println("📅 Submitted On: ${meal.submitted}".withStyle(TerminalColor.Green))
+                println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}".withStyle(TerminalColor.Green))
+                println("🔢 ${meal.stepsCount} Steps to Prepare:".withStyle(TerminalColor.Green))
                 meal.steps.forEachIndexed { index, step ->
                     println("  ${index + 1}. $step")
                 }
 
                 println("\n🍏 Nutritional Information:")
                 with(meal.nutrition) {
-                    println("🔸 Calories: $calories kcal")
-                    println("🔸 Total Fat: $totalFat g")
-                    println("🔸 Saturated Fat: $saturatedFat g")
-                    println("🔸 Carbohydrates: $carbohydrates g")
-                    println("🔸 Sugar: $sugar g")
-                    println("🔸 Sodium: $sodium mg")
-                    println("🔸 Protein: $protein g")
+                    println("🔸 Calories: $calories kcal".withStyle(TerminalColor.Green))
+                    println("🔸 Total Fat: $totalFat g".withStyle(TerminalColor.Green))
+                    println("🔸 Saturated Fat: $saturatedFat g".withStyle(TerminalColor.Green))
+                    println("🔸 Carbohydrates: $carbohydrates g".withStyle(TerminalColor.Green))
+                    println("🔸 Sugar: $sugar g".withStyle(TerminalColor.Green))
+                    println("🔸 Sodium: $sodium mg".withStyle(TerminalColor.Green))
+                    println("🔸 Protein: $protein g".withStyle(TerminalColor.Green))
                 }
 
-                println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
+                println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}".withStyle(TerminalColor.Green))
             }
-            ?: println("❌ Invalid or non-existing meal ID.")
+            ?: println("❌ Invalid or non-existing meal ID.".withStyle(TerminalColor.Red))
     }
 
     private fun getPotatoMeals() {
         getRandomPotatoMealsUseCase().forEachIndexed { index, meal ->
 
-            println("\n Meal: ${index + 1}")
-            println("\n🍽️ Meal Details: ${meal.name}")
-            println("\n🍽️ Meal Id: ${meal.id}")
-            println("ℹ️ Description: ${meal.description}")
+            println("\n Meal: ${index + 1}".withStyle(TerminalColor.Blue))
+            println("\n🍽️ Meal Details: ${meal.name}".withStyle(TerminalColor.Blue))
+            println("\n🍽️ Meal Id: ${meal.id}".withStyle(TerminalColor.Blue))
+            println("ℹ️ Description: ${meal.description}".withStyle(TerminalColor.Blue))
 
             if (meal.minutes >= 60) {
                 val hours = meal.minutes / 60
                 val remainingMinutes = meal.minutes % 60
                 val timeText = if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
-                println("⌚ Preparation Time: $timeText")
+                println("⌚ Preparation Time: $timeText".withStyle(TerminalColor.Green))
             } else {
-                println("⌚ Preparation Time: ${meal.minutes}m")
+                println("⌚ Preparation Time: ${meal.minutes}m".withStyle(TerminalColor.Green))
             }
 
             println("📅 Submitted On: ${meal.submitted}")
-            println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
+            println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}".withStyle(TerminalColor.Green))
             println("🔢 ${meal.stepsCount} Steps to Prepare:")
             meal.steps.forEachIndexed { idx, step ->
                 println("  ${idx + 1}. $step")
@@ -494,17 +496,17 @@ class FoodChangeMoodUi(
 
             println("\n🍏 Nutritional Information:")
             with(meal.nutrition) {
-                println("🔸 Calories: $calories kcal")
-                println("🔸 Total Fat: $totalFat g")
-                println("🔸 Saturated Fat: $saturatedFat g")
-                println("🔸 Carbohydrates: $carbohydrates g")
-                println("🔸 Sugar: $sugar g")
-                println("🔸 Sodium: $sodium mg")
-                println("🔸 Protein: $protein g")
+                println("🔸 Calories: $calories kcal".withStyle(TerminalColor.Green))
+                println("🔸 Total Fat: $totalFat g".withStyle(TerminalColor.Green))
+                println("🔸 Saturated Fat: $saturatedFat g".withStyle(TerminalColor.Green))
+                println("🔸 Carbohydrates: $carbohydrates g".withStyle(TerminalColor.Green))
+                println("🔸 Sugar: $sugar g".withStyle(TerminalColor.Green))
+                println("🔸 Sodium: $sodium mg".withStyle(TerminalColor.Green))
+                println("🔸 Protein: $protein g".withStyle(TerminalColor.Green))
             }
 
-            println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
-            println("-".repeat(50))
+            println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}".withStyle(TerminalColor.Green))
+            println("-".repeat(50).withStyle(TerminalColor.Cyan))
         }
 
     }
