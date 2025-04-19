@@ -5,9 +5,15 @@ import data.MealFileReader
 import data.MealRepositoryImpl
 import org.damascus.data.MealDataParser
 import org.damascus.data.source.CsvMealDataSource
+import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.logic.MealRepository
 import org.damascus.presentation.FoodChangeMoodUi
+import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.useCase.GetMealsByDateUseCase
 import org.damascus.useCase.GetRandomPotatoMealsUseCase
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
+import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.utils.CSV_FILE_PATH
 import org.koin.dsl.module
 
@@ -21,5 +27,25 @@ val appModule = module {
     single { CsvMealDataSource(get(), get()) }
     single<MealRepository> { MealRepositoryImpl(get()) }
 
-    single { FoodChangeMoodUi(get(), get()) }
+    single { GetFirstTenMealsUseCase(get()) }
+    single { GetEasyFoodSuggestionsUseCase(get()) }
+    single { GetKetoMealUseCase(get()) }
+    single { IdentifyIraqiMealsUseCase(get()) }
+    single { SearchMealByNameUseCase(get()) }
+    single { GetMealsByDateUseCase(get()) }
+    single { GetRandomPotatoMealsUseCase(get()) }
+
+    single {
+        FoodChangeMoodUi(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }
+
