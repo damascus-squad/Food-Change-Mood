@@ -4,6 +4,11 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
+import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetEggFreeSweetUseCase
+import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.useCase.IdentifyIraqiMealsUseCase
+import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.useCase.*
 import java.util.*
 
@@ -12,6 +17,7 @@ class FoodChangeMoodUi(
     private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase,
+    private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
@@ -34,12 +40,16 @@ class FoodChangeMoodUi(
                 "Get High Calorie Meal",
                 "Search Meals By Date",
                 "Play Ingredient Game",
+                "Search Meals By Date",
+                "Display Random 10 Meals That Contain Potato",
+                "Get Egg-Free Sweet",
                 "Get ........",
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { printEggFreeSweet()},
                 { printHighCalorieMeal()},
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
@@ -108,6 +118,29 @@ class FoodChangeMoodUi(
             )
         }
     }
+
+    fun printEggFreeSweet() {
+        while (true) {
+            try {
+                val meal = getEggFreeSweetUseCase()
+                println("\nEgg-Free Sweet")
+                println("Name: ${meal.name}")
+                println("Description: ${meal.description.take(150)}...")
+
+                if (askUserToLike()) {
+                    printMealsList(getFirstNMealsUseCase())
+                    return
+                } else {
+                    println("Fetching another one...")
+                }
+
+            } catch (e: NoSuchElementException) {
+                println("Error: ${e.message}")
+                return
+            }
+        }
+    }
+
 
     fun printHighCalorieMeal() {
         while (true) {
