@@ -12,12 +12,6 @@ class GuessIngredientGame(
         meal.ingredients.size >= MIN_NEEDED_TOTAL_INGREDIENTS
     }
 
-    companion object {
-        const val MAX_ALLOWED_CORRECT_ANSWERS = 15
-        const val MIN_NEEDED_WRONG_INGREDIENTS = 2
-        const val MIN_NEEDED_TOTAL_INGREDIENTS = 3
-    }
-
     fun playIngredientGame() {
         val randomMeals = validMeals.shuffled()
 
@@ -77,4 +71,9 @@ class GuessIngredientGame(
 
     }
 
+    private companion object {
+        const val MAX_ALLOWED_CORRECT_ANSWERS = 15
+        const val MIN_NEEDED_WRONG_INGREDIENTS = 2
+        const val MIN_NEEDED_TOTAL_INGREDIENTS = 3
+    }
 }

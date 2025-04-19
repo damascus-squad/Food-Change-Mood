@@ -1,6 +1,5 @@
 package org.damascus.useCase
 
-import org.damascus.logic.GuessIngredientGame.Companion.MIN_NEEDED_WRONG_INGREDIENTS
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 import org.damascus.model.MealOptions
@@ -19,7 +18,8 @@ class GetMealGameUtilsUseCase(
     fun getWrongIngredients(
         validMeals: List<Meal>,
         currentRandomMeal: Meal,
-        correctIngredient: String
+        correctIngredient: String,
+        minNeededWrongIngredients: Int = 2
     ): List<String> {
         return validMeals
             .filter { meal -> meal != currentRandomMeal }
@@ -27,7 +27,7 @@ class GetMealGameUtilsUseCase(
             .filter { ingredient -> ingredient != correctIngredient }
             .distinct()
             .shuffled()
-            .take(MIN_NEEDED_WRONG_INGREDIENTS)
+            .take(minNeededWrongIngredients)
             .toList()
     }
 

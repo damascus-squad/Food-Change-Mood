@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter
 
 class GetMealsByDateUseCase(private val repository: MealRepository) {
 
-    operator fun  invoke(inputDate: String): List<Meal> {
+    operator fun invoke(inputDate: String): List<Meal> {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
         val targetDate: LocalDate = try {

@@ -17,47 +17,52 @@ class GetItalianLargeGroupMealsUseCase(
 
     private fun isItalian(meal: Meal): Boolean {
         for (tag in meal.tags) {
-            for (keyword in italianKeywords) {
+            for (keyword in ITALIAN_KEYWORDS) {
                 if (tag.contains(keyword, ignoreCase = true)) {
                     return true
-                } } }
+                }
+            }
+        }
 
-        for (keyword in italianKeywords) {
+        for (keyword in ITALIAN_KEYWORDS) {
             if (meal.name.contains(keyword, ignoreCase = true) ||
-                meal.description.contains(keyword, ignoreCase = true)) {
+                meal.description.contains(keyword, ignoreCase = true)
+            ) {
                 return true
-            } }
+            }
+        }
 
         return false
     }
 
     private fun isGoodForLargeGroups(meal: Meal): Boolean {
         if (meal.ingredientsCount < 5) return false
+        if (meal.stepsCount < 3) return false
 
-        if (meal.stepsCount <3 ) return false
-
-        for (keyword in largeGroupKeywords) {
+        for (keyword in LARGE_GROUP_KEYWORDS) {
             if (meal.description.contains(keyword, ignoreCase = true)) return true
 
             for (ingredient in meal.ingredients) {
                 if (ingredient.contains(keyword, ignoreCase = true)) return true
-            } }
+            }
+        }
 
         return meal.ingredientsCount >= 8
     }
 
-    val italianKeywords = listOf(
-        "italian", "italy", "pasta", "pizza", "risotto",
-        "lasagna", "carbonara", "tiramisu", "parmesan",
-        "mozzarella", "prosciutto", "bruschetta", "focaccia",
-        "spaghetti", "ravioli", "gnocchi", "penne", "fettuccine",
-        "marinara", "alfredo", "bolognese", "cannelloni", "ziti"
-    )
-
-    val largeGroupKeywords = listOf(
-        "pounds", "lbs", "kilos", "kg", "cups", "large", "party",
-        "group", "crowd", "serving", "feeds", "family", "potluck",
-        "gathering", "batch", "holiday", "celebration"
-    )
+    private companion object {
+        val ITALIAN_KEYWORDS = listOf(
+            "italian", "italy", "pasta", "pizza", "risotto",
+            "lasagna", "carbonara", "tiramisu", "parmesan",
+            "mozzarella", "prosciutto", "bruschetta", "focaccia",
+            "spaghetti", "ravioli", "gnocchi", "penne", "fettuccine",
+            "marinara", "alfredo", "bolognese", "cannelloni", "ziti"
+        )
+        val LARGE_GROUP_KEYWORDS = listOf(
+            "pounds", "lbs", "kilos", "kg", "cups", "large", "party",
+            "group", "crowd", "serving", "feeds", "family", "potluck",
+            "gathering", "batch", "holiday", "celebration"
+        )
+    }
 
 }

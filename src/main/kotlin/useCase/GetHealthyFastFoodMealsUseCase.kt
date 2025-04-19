@@ -28,19 +28,18 @@ class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository
     }
 
     private infix fun Nutrition.isNutritionallyBetterThan(averages: NutritionAverages): Boolean {
-        return totalFat.let { totalFat -> totalFat < averages.averageFat }
-                && saturatedFat.let { saturatedFat -> saturatedFat < averages.averageSaturatedFat }
-                && carbohydrates.let { carbohydrates -> carbohydrates < averages.averageCarbs }
+        return totalFat < averages.averageFat
+                && saturatedFat < averages.averageSaturatedFat
+                && carbohydrates < averages.averageCarbs
     }
 
     private infix fun Meal.isHealthyFastFoodBy(averages: NutritionAverages): Boolean {
-        return minutes.let { preparationTime -> preparationTime <= MAXIMUM_MINUTES_TO_PREPARE_MEAL }
+        return minutes <= MAXIMUM_MINUTES_TO_PREPARE_MEAL
                 && nutrition isNutritionallyBetterThan averages
 
     }
 
-    companion object {
-        const val TOP_MEALS = 10
+    private companion object {
         const val MAXIMUM_MINUTES_TO_PREPARE_MEAL = 15
     }
 }

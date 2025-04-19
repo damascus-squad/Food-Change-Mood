@@ -8,10 +8,6 @@ import org.damascus.model.TextMatchResult
 class SearchMealByNameUseCase(
     private val mealRepo: MealRepository,
 ) {
-    companion object {
-        const val MAX_ALLOWED_SEARCH_PHRASE_LENGTH = 31
-    }
-
     operator fun invoke(searchPhrase: String): List<Meal> {
 
         if (searchPhrase.length > MAX_ALLOWED_SEARCH_PHRASE_LENGTH) {
@@ -118,6 +114,10 @@ class SearchMealByNameUseCase(
 
             previousState = currentState
         }
+    }
+
+    private companion object {
+        const val MAX_ALLOWED_SEARCH_PHRASE_LENGTH = 31
     }
 
 }

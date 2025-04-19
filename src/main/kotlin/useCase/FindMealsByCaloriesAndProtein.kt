@@ -18,13 +18,16 @@ class FindMealsByCaloriesAndProtein(
     }
 
     private fun isWithinCaloriesRange(calories: Double, target: Double): Boolean {
-        val tolerance = 15.0
-        return calories in (target - tolerance)..(target + tolerance)
+        return calories in (target - CALORIES_TOLERANCE)..(target + CALORIES_TOLERANCE)
     }
 
     private fun isWithinProteinRange(protein: Double, target: Double): Boolean {
-        val tolerance = 3.0
-        return protein in (target - tolerance)..(target + tolerance)
+        return protein in (target - PROTEIN_TOLERANCE)..(target + PROTEIN_TOLERANCE)
+    }
+
+    private companion object {
+        const val CALORIES_TOLERANCE = 15.0
+        const val PROTEIN_TOLERANCE = 3.0
     }
 
 }

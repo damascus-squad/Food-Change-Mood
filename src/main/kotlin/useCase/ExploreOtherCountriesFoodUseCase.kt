@@ -5,7 +5,7 @@ import org.damascus.model.Meal
 
 class ExploreOtherCountriesFoodUseCase(private val mealRepo: MealRepository) {
 
-    fun getCountryFood(country:String, limit:Int):List<Meal>{
+    fun getCountryFood(country: String, limit: Int): List<Meal> {
         val matchingMeals = searchMealsByCountry(country)
         return pickRandomMeals(matchingMeals, limit)
     }
