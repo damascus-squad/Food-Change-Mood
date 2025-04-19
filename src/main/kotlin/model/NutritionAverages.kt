@@ -1,7 +1,7 @@
 package org.damascus.model
 
 data class NutritionAverages(
-    val fat: Double,
-    val saturatedFat: Double,
-    val carbs: Double
+    val averageFat: Double,
+    val averageSaturatedFat: Double,
+    val averageCarbs: Double,
 )
