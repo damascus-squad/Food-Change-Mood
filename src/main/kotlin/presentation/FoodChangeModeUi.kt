@@ -1,11 +1,10 @@
 package org.damascus.presentation
 
 import org.damascus.logic.GetFirstTenMealsUseCase
-import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 import org.damascus.useCase.GetMealsByDateUseCase
 
-class FoodChangeMoodUI(
+class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getMealsByDateUseCase: GetMealsByDateUseCase,
 ) {
