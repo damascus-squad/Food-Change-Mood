@@ -36,7 +36,7 @@ class FoodChangeMoodUi(
                 "Get High Calorie Meal",
                 "Search Meals By Date",
                 "Search Meals By Date",
-                "Display Random 10 Meals That Contain Potato"
+                "Display Random 10 Meals That Contain Potato",
                 "Get Egg-Free Sweet",
                 "Get ........",
             ),
@@ -50,7 +50,6 @@ class FoodChangeMoodUi(
                 { printSearchResult() },
                 { playGuessGame(getRandomMealUseCase.getRandomMeal()) },
                 { showMealsForSelectedDate()},
-                { getPotatoMeals()}
             )
         )
     }
@@ -134,17 +133,7 @@ class FoodChangeMoodUi(
             }
         }
     }
-    private fun askUserToLike(): Boolean {
-        print("Do you like it? (y/n): ")
-        return when (readlnOrNull()?.trim()?.lowercase()) {
-            "y" -> true
-            "n" -> false
-            else -> {
-                println("Invalid input. Please enter 'y' or 'n'.")
-                askUserToLike()
-            }
-        }
-    }
+
 
     fun printHighCalorieMeal() {
         while (true) {
@@ -359,46 +348,6 @@ class FoodChangeMoodUi(
                 println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
             }
             ?: println("❌ Invalid or non-existing meal ID.")
-    }
-    private fun getPotatoMeals() {
-        getRandomPotatoMealsUseCase().forEachIndexed { index, meal ->
-
-            println("\n Meal: ${index + 1}")
-            println("\n🍽️ Meal Details: ${meal.name}")
-            println("\n🍽️ Meal Id: ${meal.id}")
-            println("ℹ️ Description: ${meal.description}")
-
-            if (meal.minutes >= 60) {
-                val hours = meal.minutes / 60
-                val remainingMinutes = meal.minutes % 60
-                val timeText = if (remainingMinutes > 0) "${hours}h ${remainingMinutes}m" else "${hours}h"
-                println("⌚ Preparation Time: $timeText")
-            } else {
-                println("⌚ Preparation Time: ${meal.minutes}m")
-            }
-
-            println("📅 Submitted On: ${meal.submitted}")
-            println("🍴 Ingredients: ${meal.ingredients.joinToString(", ")}")
-            println("🔢 ${meal.stepsCount} Steps to Prepare:")
-            meal.steps.forEachIndexed { index, step ->
-                println("  ${index + 1}. $step")
-            }
-
-            println("\n🍏 Nutritional Information:")
-            with(meal.nutrition) {
-                println("🔸 Calories: $calories kcal")
-                println("🔸 Total Fat: $totalFat g")
-                println("🔸 Saturated Fat: $saturatedFat g")
-                println("🔸 Carbohydrates: $carbohydrates g")
-                println("🔸 Sugar: $sugar g")
-                println("🔸 Sodium: $sodium mg")
-                println("🔸 Protein: $protein g")
-            }
-
-            println("\n🏷️ Tags: ${meal.tags.joinToString(" || ")}")
-            println("-".repeat(50))
-        }
-
     }
 
 }

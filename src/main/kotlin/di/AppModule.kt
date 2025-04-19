@@ -40,15 +40,10 @@ val appModule = module {
             get(),
             get(),
             get(),
+            get(),
+            get(),
+            get(),
             get()
         )
     }
-    single { FoodChangeMoodUi(get(), get(), get(), get(), get(),get()) }
-    single { FoodChangeMoodUi(get(), get(),get(),get(),get(),get()) }
-    single { FoodChangeMoodUi(get(), get(), get(),
-        get(),
-        get(),
-        get(),
-
-    ) }
 }

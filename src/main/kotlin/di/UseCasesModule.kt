@@ -9,6 +9,7 @@ import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
 import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.useCase.GetRandomMealUseCase
 import org.koin.dsl.module
 
 
@@ -20,6 +21,6 @@ val useCaseModule = module {
     single { GetMealsByDateUseCase(get())}
     single { SearchMealByNameUseCase(get()) }
     single { GetKetoMealUseCase(get()) }
-    single { GuessMealUseCase(get() ) }
     single { GetHighCalorieMealUseCase(get()) }
+    single { GetRandomMealUseCase(get()) }
 }
