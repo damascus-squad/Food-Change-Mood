@@ -4,6 +4,7 @@ package org.damascus.presentation
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.GetKetoMealUseCase
 import org.damascus.useCase.GetMealsByDateUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
@@ -12,6 +13,7 @@ import org.damascus.useCase.SearchMealByNameUseCase
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
+    private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase,
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
@@ -26,12 +28,15 @@ class FoodChangeMoodUi(
                 "Identify iraqi meals",
                 "Easy Food Suggestion",
                 "Display a Keto Diet Meal",
+                "Search Meals",
+                "Get High Calorie Meal",
                 "Search Meals By Date"
             ),
             actions = listOf(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
+                { printHighCalorieMeal()},
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
                 { showMealsForSelectedDate()}
@@ -95,6 +100,56 @@ class FoodChangeMoodUi(
                         "IngredientsCount=${meal.ingredientsCount}\n\n"
             )
         }
+    }
+
+    fun printHighCalorieMeal() {
+        while (true) {
+            try {
+                val meals = getHighCalorieMealUseCase()
+
+                for (meal in meals) {
+                    println("\nHigh Calorie Meal")
+                    println("Name: ${meal.name}")
+                    println("Calories: ${meal.nutrition.calories}")
+                    println("Description: ${meal.description.take(150)}...")
+
+                    if (askUserToLike()) {
+                        printMealDetails(meal)
+                        return
+                    } else {
+                        println("Skipping...")
+                        continue
+                    }
+                }
+
+            } catch (e: NoSuchElementException) {
+                println("No more high-calorie meals to show.")
+                return
+            }
+        }
+    }
+
+
+    private fun askUserToLike(): Boolean {
+        print("Do you like it? (y/n): ")
+        return when (readlnOrNull()?.trim()?.lowercase()) {
+            "y" -> true
+            "n" -> false
+            else -> {
+                println("Invalid input. Please enter 'y' or 'n'.")
+                askUserToLike()
+            }
+        }
+    }
+
+    private fun printMealDetails(meal: Meal) {
+        println("Minutes: ${meal.minutes}")
+        println("Submitted: ${meal.submitted}")
+        println("Nutrition: ${meal.nutrition}")
+        println("StepsCount: ${meal.stepsCount}")
+        println("Steps: ${meal.steps}")
+        println("Ingredients: ${meal.ingredients}")
+        println("IngredientsCount: ${meal.ingredientsCount}")
     }
 
 

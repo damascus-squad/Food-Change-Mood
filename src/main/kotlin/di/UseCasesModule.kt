@@ -4,6 +4,7 @@ import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.useCase.GetMealsByDateUseCase
 
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.IdentifyIraqiMealsUseCase
 import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.useCase.GetKetoMealUseCase
@@ -17,4 +18,5 @@ val useCaseModule = module {
     single { GetEasyFoodSuggestionsUseCase(get()) }
     single { SearchMealByNameUseCase(get()) }
     single { GetKetoMealUseCase(get()) }
+    single { GetHighCalorieMealUseCase(get()) }
 }
