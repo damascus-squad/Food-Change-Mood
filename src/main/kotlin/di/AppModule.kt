@@ -47,5 +47,6 @@ val appModule = module {
             get()
         )
     }
+    single { FoodChangeMoodUi(get(), get(), get(), get(), get(),get()) }
 }
 

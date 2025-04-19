@@ -3,6 +3,8 @@ package org.damascus.presentation
 
 import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.model.Meal
+import org.damascus.useCase.*
+import java.util.*
 import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
 import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.GetKetoMealUseCase
@@ -18,6 +20,8 @@ class FoodChangeMoodUi(
     private val getKetoMealUseCase: GetKetoMealUseCase,
     private val identifyIraqiMealsUseCase: IdentifyIraqiMealsUseCase,
     private val searchMealByNameUseCase: SearchMealByNameUseCase,
+    private val getRandomMealUseCase: GetRandomMealUseCase,
+    private val getMealsByDateUseCase: GetMealsByDateUseCase
     private val getMealsByDateUseCase: GetMealsByDateUseCase,
     private val getRandomPotatoMealsUseCase: GetRandomPotatoMealsUseCase
 ) {
@@ -31,6 +35,7 @@ class FoodChangeMoodUi(
                 "Easy Food Suggestion",
                 "Display a Keto Diet Meal",
                 "Search Meals",
+                "Guess Preparation Time of Meal",
                 "Get High Calorie Meal",
                 "Search Meals By Date",
                 "Display Random 10 Meals That Contain Potato"
@@ -39,9 +44,9 @@ class FoodChangeMoodUi(
                 { printMealsList(getFirstNMealsUseCase()) },
                 { printMealsList(identifyIraqiMealsUseCase.invoke()) },
                 { printMealsList(getEasyFoodSuggestionsUseCase()) },
-                { printHighCalorieMeal()},
                 { showKetoMenu(getKetoMealUseCase()) },
                 { printSearchResult() },
+                { playGuessGame(getRandomMealUseCase.getRandomMeal()) },
                 { showMealsForSelectedDate()},
                 { getPotatoMeals()}
             )
@@ -157,7 +162,7 @@ class FoodChangeMoodUi(
     }
 
 
-    fun showKetoMenu(meals: List<Meal>) {
+    private fun showKetoMenu(meals: List<Meal>) {
         val notShownMeals = meals.shuffled().toMutableList()
 
         var suggestion: Meal
@@ -214,6 +219,41 @@ class FoodChangeMoodUi(
             }
             println("Invalid input, please try again.")
         }
+
+    }
+
+    private fun playGuessGame(meal: Meal) {
+        println("🎮 Welcome to the Guess Game!")
+        println("Meal name: ${meal.name}")
+        println("Guess the preparation time in minutes (you have 3 attempts)")
+
+        val scanner = Scanner(System.`in`)
+        var attempts = 3
+
+        while (attempts > 0) {
+            print("Enter your guess: ")
+            val guess = scanner.nextLine().toIntOrNull()
+
+            if (guess == null) {
+                println("⚠️ Please enter a valid number.")
+                continue
+            }
+
+            when {
+                guess == meal.minutes -> {
+                    println("✅ Correct! The preparation time is ${meal.minutes} minutes.")
+                    return
+                }
+
+                guess < meal.minutes -> println("⬆️ Your guess is too low.")
+                else -> println("⬇️ Your guess is too high.")
+            }
+
+            attempts--
+            if (attempts > 0) println("📌 You have $attempts attempt(s) left.")
+        }
+
+        println("❌ No more attempts. The correct time was: ${meal.minutes} minutes.")
     }
 
     private fun showMealsForSelectedDate() {
