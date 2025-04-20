@@ -29,23 +29,6 @@ val appModule = module {
     single { GetMealsByDateUseCase(get()) }
 
     single {
-        FoodChangeMoodUi(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
+        FoodChangeMoodUi(get())
     }
 }

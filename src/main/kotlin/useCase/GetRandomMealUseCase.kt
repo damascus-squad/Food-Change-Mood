@@ -7,7 +7,7 @@ import org.damascus.model.Meal
 class GetRandomMealUseCase(
     private val mealRepository: MealRepository
 ) {
-    fun getRandomMeal(): Meal {
+    operator fun invoke(): Meal {
         return mealRepository.getAllMeals().random()
     }
 }
