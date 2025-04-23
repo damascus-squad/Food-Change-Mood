@@ -12,14 +12,14 @@ class GetMealsByDateUseCase(private val repository: MealRepository) {
 
         val targetDate: LocalDate = try {
             LocalDate.parse(inputDate, formatter)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             throw IllegalArgumentException("⚠️ Incorrect date format. Use yyyy-MM-dd.")
         }
 
         val matchedMeals = repository.getAllMeals().filter { meal ->
             try {
                 LocalDate.parse(meal.submitted, formatter) == targetDate
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 false
             }
         }
