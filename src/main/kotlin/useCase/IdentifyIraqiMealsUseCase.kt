@@ -7,12 +7,13 @@ class IdentifyIraqiMealsUseCase(
     private val repo: MealRepository
 ) {
     operator fun invoke(nationality: String = "iraqi"): List<Meal> {
-        val iraqiMeals = repo.getAllMeals().filter { meal ->
-            (meal.description.lowercase().contains(nationality) ||
-                    meal.tags.joinToString().lowercase().contains(nationality))
-        }
+        return repo.getAllMeals().filter { meal -> isMealFromNationality(meal, nationality) }
+    }
 
-        return iraqiMeals
+    private fun isMealFromNationality(meal: Meal, nationality: String): Boolean {
+        return meal.name.contains(nationality, ignoreCase = true) ||
+                meal.description.contains(nationality, ignoreCase = true) ||
+                meal.tags.any { it.contains(nationality, ignoreCase = true) }
     }
 
 }
