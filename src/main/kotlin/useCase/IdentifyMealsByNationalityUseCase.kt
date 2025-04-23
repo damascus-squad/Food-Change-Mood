@@ -3,7 +3,7 @@ package org.damascus.useCase
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 
-class IdentifyIraqiMealsUseCase(
+class IdentifyMealsByNationalityUseCase(
     private val repo: MealRepository
 ) {
     operator fun invoke(nationality: String = "iraqi"): List<Meal> {
