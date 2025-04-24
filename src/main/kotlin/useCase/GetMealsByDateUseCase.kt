@@ -1,5 +1,7 @@
 package org.damascus.useCase
 
+import org.damascus.domain.IllegalDateFormatException
+import org.damascus.domain.NoSuchMealException
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 import java.time.LocalDate
@@ -13,7 +15,7 @@ class GetMealsByDateUseCase(private val repository: MealRepository) {
         val targetDate: LocalDate = try {
             LocalDate.parse(inputDate, formatter)
         } catch (_: Exception) {
-            throw IllegalArgumentException("⚠️ Incorrect date format. Use yyyy-MM-dd.")
+            throw IllegalDateFormatException("Incorrect date format. Use yyyy-MM-dd.")
         }
 
         val matchedMeals = repository.getAllMeals().filter { meal ->
@@ -25,7 +27,7 @@ class GetMealsByDateUseCase(private val repository: MealRepository) {
         }
 
         if (matchedMeals.isEmpty()) {
-            throw NoSuchElementException("❌ No meals found on $inputDate.")
+            throw NoSuchMealException("No meals found on $inputDate.")
         }
 
         return matchedMeals
