@@ -8,7 +8,9 @@ import org.damascus.model.TextMatchResult
 class SearchMealByNameUseCase(
     private val mealRepo: MealRepository,
 ) {
-    operator fun invoke(searchPhrase: String): List<Meal> {
+    operator fun invoke(searchPhrase: String, maxErrors: Int = 2): List<Meal> {
+
+        if (maxErrors < 0) return emptyList()
 
         if (searchPhrase.length > MAX_ALLOWED_SEARCH_PHRASE_LENGTH) {
             throw IllegalArgumentException("Search phrase too long: maximum length is 31 characters")
@@ -19,7 +21,8 @@ class SearchMealByNameUseCase(
         mealRepo.getAllMeals().forEach { meal ->
             val searchMatches = bitapFuzzySearch(
                 text = meal.name,
-                pattern = searchPhrase
+                pattern = searchPhrase,
+                maxErrors = maxErrors
             )
 
             if (searchMatches.isNotEmpty()) {
@@ -42,8 +45,7 @@ class SearchMealByNameUseCase(
      * @param maxErrors The maximum number of allowed errors/differences
      * @return List of starting indices where matches were found
      */
-    private fun bitapFuzzySearch(text: String, pattern: String, maxErrors: Int = 2): List<TextMatchResult> {
-        if (pattern.isEmpty()) return emptyList()
+    private fun bitapFuzzySearch(text: String, pattern: String, maxErrors: Int ): List<TextMatchResult> {
 
         val patternLength = pattern.length
 
