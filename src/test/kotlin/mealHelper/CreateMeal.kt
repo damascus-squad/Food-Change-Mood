@@ -1,9 +1,9 @@
-package useCase
+package mealHelper
 
 import model.Nutrition
 import org.damascus.model.Meal
 
-fun createSeafoodMeal(
+fun createMeal(
     name: String = "Test Meal",
     id: Int = 1234,
     minutes: Int = 30,
