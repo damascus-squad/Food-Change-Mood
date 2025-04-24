@@ -19,7 +19,7 @@ class GetEasyFoodSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `should filter meals by time, ingredients count and steps count`() {
+    fun `should return only meals with time less than or equal 30 minutes, ingredients less than or equal 5 and steps less than or equal 6 when filtering meals`() {
         // Given
         val validMeal = createEasyMeal(
             name = "Valid Meal",
@@ -61,7 +61,7 @@ class GetEasyFoodSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `should return empty list when no meals meet criteria`() {
+    fun `should return empty list when no meals meet the criteria`() {
         // Given
         val invalidMeal = createEasyMeal(
             minutes = 31,
@@ -78,7 +78,7 @@ class GetEasyFoodSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `should return maximum 10 meals`() {
+    fun `should return maximum 10 meals when there are more than 10 matching meals`() {
         // Given
         val validMeals = (1..15).map {
             createEasyMeal(
@@ -98,7 +98,7 @@ class GetEasyFoodSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `should return meals in random order`() {
+    fun `should return meals in random order when multiple meals exist`() {
         // Given
         val validMeals = (1..15).map {
             createEasyMeal(
@@ -119,7 +119,7 @@ class GetEasyFoodSuggestionsUseCaseTest {
     }
 
     @Test
-    fun `should include meals with exactly 30 minutes, 5 ingredients and 6 steps`() {
+    fun `should include meals when they have exactly 30 minutes, 5 ingredients and 6 steps`() {
         // Given
         val edgeCaseMeal = createEasyMeal(
             minutes = 30,
