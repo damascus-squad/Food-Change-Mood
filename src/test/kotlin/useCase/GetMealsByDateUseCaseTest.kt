@@ -4,17 +4,95 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import model.Nutrition
+import org.damascus.domain.IllegalDateFormatException
+import org.damascus.domain.NoSuchMealException
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 import org.damascus.useCase.GetMealsByDateUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 class GetMealsByDateUseCaseTest {
 
     private lateinit var mealRepository: MealRepository
     private lateinit var getMealsByDateUseCase: GetMealsByDateUseCase
+
+    @BeforeEach
+    fun setup() {
+        mealRepository = mockk(relaxed = true)
+        getMealsByDateUseCase = GetMealsByDateUseCase(mealRepository)
+    }
+
+    @ParameterizedTest
+    @CsvSource("11-11-2011", "?????") // Given
+    fun `invoke should throw an IllegalDateFormatException exception when date format is incorrect`(inputDate: String) {
+        // When && Then
+        assertThrows<IllegalDateFormatException> {
+            getMealsByDateUseCase(inputDate)
+        }
+    }
+
+    @Test
+    fun `invoke should throw an IllegalDateFormatException exception when date input is empty`() {
+        // Given
+        val inputDate = ""
+
+        // When && Then
+        assertThrows<IllegalDateFormatException> {
+            getMealsByDateUseCase(inputDate)
+        }
+    }
+
+
+    @Test
+    fun `invoke should throw a NoSuchMealException when no matches are found`() {
+        // Given
+        val inputDate = "1011-11-11"
+        every { mealRepository.getAllMeals() } returns listOfMealsWithRecentDates()
+
+        // When && Then
+        assertThrows<NoSuchMealException> {
+            getMealsByDateUseCase(inputDate)
+        }
+    }
+
+    @Test
+    fun `invoke should ignore existing meals with incorrect Format`() {
+        // Given
+        val inputDate = "2024-12-31"
+        every { mealRepository.getAllMeals() } returns listOfMealsWithIncorrectlyFormattedDates()
+
+        // When
+        val matches = getMealsByDateUseCase(inputDate)
+
+        // Then
+        assertThat(matches).isEqualTo(
+            listOf(
+                defaultMeal(submitted = "2024-12-31"), defaultMeal(submitted = "2024-12-31")
+            )
+        )
+    }
+
+    @Test
+    fun `invoke should return a list of matches when they exist`() {
+        // Given
+        val inputDate = "2024-12-31"
+        every { mealRepository.getAllMeals() } returns listOfMealsWithRecentDates()
+
+        // When
+        val matches = getMealsByDateUseCase(inputDate)
+
+        // Then
+        assertThat(matches).isEqualTo(
+            listOf(
+                defaultMeal(submitted = "2024-12-31")
+            )
+        )
+    }
+
 
     private fun defaultMeal(
         name: String = "Koshry",
@@ -67,70 +145,6 @@ class GetMealsByDateUseCaseTest {
             defaultMeal(submitted = "2024-12-31"),
             defaultMeal(submitted = "12-11-2023"),
             defaultMeal(submitted = "2024-12-31")
-        )
-    }
-
-    @BeforeEach
-    fun setup() {
-        mealRepository = mockk(relaxed = true)
-        getMealsByDateUseCase = GetMealsByDateUseCase(mealRepository)
-    }
-
-    @Test
-    fun `invoke should throw an IllegalArgumentException exception when date format is incorrect`() {
-        // Given
-        val inputDate = "11-11-2011"
-
-        // When && Then
-        assertThrows<IllegalArgumentException> {
-            getMealsByDateUseCase(inputDate)
-        }
-    }
-
-    @Test
-    fun `invoke should throw a NoSuchElementException when no matches are found`() {
-        // Given
-        val inputDate = "1011-11-11"
-        every { mealRepository.getAllMeals() } returns listOfMealsWithRecentDates()
-
-        // When && Then
-        assertThrows<NoSuchElementException> {
-            getMealsByDateUseCase(inputDate)
-        }
-    }
-
-    @Test
-    fun `invoke should ignore existing meals with incorrect Format`() {
-        // Given
-        val inputDate = "2024-12-31"
-        every { mealRepository.getAllMeals() } returns listOfMealsWithIncorrectlyFormattedDates()
-
-        // When
-        val matches = getMealsByDateUseCase(inputDate)
-
-        // Then
-        assertThat(matches).isEqualTo(
-            listOf(
-                defaultMeal(submitted = "2024-12-31"),
-                defaultMeal(submitted = "2024-12-31")
-            )
-        )
-    }
-    
-    @Test
-    fun `invoke should return a list of matches when they exist` () {
-        // Given
-        val inputDate = "2024-12-31"
-        every { mealRepository.getAllMeals() } returns listOfMealsWithRecentDates()
-
-        // When
-        val matches = getMealsByDateUseCase(inputDate)
-
-        // Then
-        assertThat(matches).isEqualTo(
-            listOf(
-                defaultMeal(submitted = "2024-12-31")
-            )
         )
     }
 
