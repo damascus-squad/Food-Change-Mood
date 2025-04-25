@@ -6,18 +6,18 @@ import io.mockk.mockk
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.IdentifyIraqiMealsUseCase
+import org.damascus.useCase.IdentifyMealsByNationalityUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class IdentifyIraqiMealsUseCaseTest {
     private lateinit var mealRepository: MealRepository
-    private lateinit var useCase: IdentifyIraqiMealsUseCase
+    private lateinit var useCase: IdentifyMealsByNationalityUseCase
 
     @BeforeEach
     fun setup() {
         mealRepository = mockk()
-        useCase = IdentifyIraqiMealsUseCase(mealRepository)
+        useCase = IdentifyMealsByNationalityUseCase(mealRepository)
     }
 
     @Test
