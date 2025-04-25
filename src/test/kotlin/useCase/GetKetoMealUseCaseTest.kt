@@ -1,4 +1,4 @@
-package org.damascus.useCase
+package useCase
 
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
@@ -6,6 +6,7 @@ import io.mockk.mockk
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
+import org.damascus.useCase.GetKetoMealUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -53,25 +54,18 @@ class GetKetoMealUseCaseTest {
         "500.0, 10.0, -1.0, 20.0",
         "500.0, 10.0, 40.0, -1.0",
     )
-    fun `should filter out meals with invalid nutrition values`(notKetoFriendlyNutrition: Nutrition) {
+    fun `should filter out meals with invalid nutrition values`(
+        calories: Double, totalFat: Double, protein: Double, carbohydrates: Double
+    ) {
         // Given
         val meals = listOf(
             defaultMeal(
-                name = "Valid Keto Meal",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    totalFat = 45.0,
-                    protein = 20.0,
-                    carbohydrates = 10.0
+                name = "Valid Keto Meal", nutrition = defaultNutrition(
+                    calories = 500.0, totalFat = 45.0, protein = 20.0, carbohydrates = 10.0
                 )
-            ),
-            defaultMeal(
-                name = "Invalid Meal",
-                nutrition = defaultNutrition(
-                    calories = notKetoFriendlyNutrition.calories,
-                    totalFat = notKetoFriendlyNutrition.totalFat,
-                    protein = notKetoFriendlyNutrition.protein,
-                    carbohydrates = notKetoFriendlyNutrition.carbohydrates
+            ), defaultMeal(
+                name = "Invalid Meal", nutrition = defaultNutrition(
+                    calories = calories, totalFat = totalFat, protein = protein, carbohydrates = carbohydrates
                 )
             )
         )
@@ -108,15 +102,23 @@ class GetKetoMealUseCaseTest {
         // Then
         assertThat(result).doesNotContain(
             defaultMeal(
-                name = "Just Over Max Carbs",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 15.1,
-                    totalFat = 40.0,
-                    protein = 15.0
+                name = "Just Over Max Carbs", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 15.1, totalFat = 40.0, protein = 15.0
                 )
             )
         )
+    }
+
+    @Test
+    fun `should handle meals at the boundary of nutrition`() {
+        // Given
+        every { mealRepository.getAllMeals() } returns boundaryBreakingConditionsMealsList()
+
+        // When
+        val result = getKetoMealUseCase()
+
+        // Then
+        assertThat(result).hasSize(0)
     }
 
     private fun defaultMeal(
@@ -172,39 +174,20 @@ class GetKetoMealUseCaseTest {
     private fun mixedMealsList(): List<Meal> {
         return listOf(
             defaultMeal(
-                name = "Keto Meal",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 45.0,
-                    protein = 20.0
+                name = "Keto Meal", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 45.0, protein = 20.0
                 )
-            ),
-            defaultMeal(
-                name = "Non-Keto Meal 1",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 20.0,
-                    totalFat = 35.0,
-                    protein = 20.0
+            ), defaultMeal(
+                name = "Non-Keto Meal 1", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 20.0, totalFat = 35.0, protein = 20.0
                 )
-            ),
-            defaultMeal(
-                name = "Non-Keto Meal 2",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 25.0,
-                    protein = 50.0
+            ), defaultMeal(
+                name = "Non-Keto Meal 2", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 25.0, protein = 50.0
                 )
-            ),
-            defaultMeal(
-                name = "Non-Keto Meal 3",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 40.0,
-                    protein = 60.0
+            ), defaultMeal(
+                name = "Non-Keto Meal 3", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 40.0, protein = 60.0
                 )
             )
         )
@@ -213,21 +196,12 @@ class GetKetoMealUseCaseTest {
     private fun nonKetoMealsList(): List<Meal> {
         return listOf(
             defaultMeal(
-                name = "High Carb Meal",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 100.0,
-                    totalFat = 20.0,
-                    protein = 30.0
+                name = "High Carb Meal", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 100.0, totalFat = 20.0, protein = 30.0
                 )
-            ),
-            defaultMeal(
-                name = "Low Fat Meal",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 15.0,
-                    protein = 70.0
+            ), defaultMeal(
+                name = "Low Fat Meal", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 15.0, protein = 70.0
                 )
             )
         )
@@ -236,50 +210,55 @@ class GetKetoMealUseCaseTest {
     private fun boundaryConditionMealsList(): List<Meal> {
         return listOf(
             defaultMeal(
-                name = "Exact Max Carbs",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 15.0,
-                    totalFat = 40.0,
-                    protein = 15.0
+                name = "Exact Max Carbs", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 15.0, totalFat = 40.0, protein = 15.0
                 )
-            ),
-            defaultMeal(
-                name = "Exact Min Fat Percentage",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 38.89,
-                    protein = 15.0
+            ), defaultMeal(
+                name = "Exact Min Fat Percentage", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 38.89, protein = 15.0
                 )
-            ),
-            defaultMeal(
-                name = "Exact Min Protein Percentage",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 40.0,
-                    protein = 12.5
+            ), defaultMeal(
+                name = "Exact Min Protein Percentage", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 40.0, protein = 12.5
                 )
-            ),
-            defaultMeal(
-                name = "Exact Max Protein Percentage",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 10.0,
-                    totalFat = 40.0,
-                    protein = 25.0
+            ), defaultMeal(
+                name = "Exact Max Protein Percentage", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 40.0, protein = 25.0
                 )
-            ),
-            defaultMeal(
-                name = "Just Over Max Carbs",
-                nutrition = defaultNutrition(
-                    calories = 500.0,
-                    carbohydrates = 15.1,
-                    totalFat = 40.0,
-                    protein = 15.0
+            ), defaultMeal(
+                name = "Just Over Max Carbs", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 15.1, totalFat = 40.0, protein = 15.0
                 )
             )
+        )
+    }
+
+    private fun boundaryBreakingConditionsMealsList(): List<Meal> {
+        return listOf(
+            defaultMeal(
+                name = "Less Than Min Total Fat", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = -1.0, protein = 25.0
+                )
+            ), defaultMeal(
+                name = "Less Than Min Protein", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 40.0, protein = -1.0
+                )
+            ),
+            defaultMeal(
+                name = "Less Than Min Calories", nutrition = defaultNutrition(
+                    calories = -1.0, carbohydrates = 10.0, totalFat = 40.0, protein = 25.0
+                )
+            ),
+            defaultMeal(
+                name = "More Than Max Carbs", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 20.0, totalFat = 40.0, protein = 25.0
+                )
+            ),
+            defaultMeal(
+                name = "Less Than Min Protein", nutrition = defaultNutrition(
+                    calories = 500.0, carbohydrates = 10.0, totalFat = 40.0, protein = 5.0
+                )
+            ),
         )
     }
 }
