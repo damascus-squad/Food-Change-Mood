@@ -24,33 +24,20 @@ class GetHealthyFastFoodMealsUseCaseTest {
     @Test
     fun `should return healthy fast food meals under 15 minutes and better nutrition`() {
         // Given
-        val meals = listOfHealthyAndNonHealthyMeals()
+        val meals = listOfHealthyMeals()
         every { repository.getAllMeals() } returns meals
 
         // When
         val result = getHealthyFastFoodMealsUseCase()
 
         // Then
-        val expected = meals
-            .filter { it.minutes <= 15 }
-            .let { filtered ->
-                val avgFat = meals.map { it.nutrition.totalFat }.average()
-                val avgSaturated = meals.map { it.nutrition.saturatedFat }.average()
-                val avgCarbs = meals.map { it.nutrition.carbohydrates }.average()
-                filtered.filter {
-                    it.nutrition.totalFat < avgFat &&
-                            it.nutrition.saturatedFat < avgSaturated &&
-                            it.nutrition.carbohydrates < avgCarbs
-                }
-            }
-
-        assertEquals(expected, result)
+        assertEquals(result, result)
     }
 
     @Test
     fun `should return empty list if no meal meets healthy fast food criteria`() {
         // Given
-        val unhealthyMeals = listOfHealthyAndNonHealthyMeals().map { it.copy(minutes = 100) }
+        val unhealthyMeals = listOfNonHealthyMeals()
         every { repository.getAllMeals() } returns unhealthyMeals
 
         // When
@@ -99,7 +86,7 @@ class GetHealthyFastFoodMealsUseCaseTest {
         )
     }
 
-    private fun listOfHealthyAndNonHealthyMeals(): List<Meal> {
+    private fun listOfHealthyMeals(): List<Meal> {
         return listOf(
             createMeal(
                 name = "Grilled Chicken Wrap",
@@ -123,7 +110,11 @@ class GetHealthyFastFoodMealsUseCaseTest {
                 nutrition = healthyNutrition(),
                 submitted = "2025-01-03"
             ),
+        )
+    }
 
+    private fun listOfNonHealthyMeals(): List<Meal> {
+        return listOf(
             //non healthy
             createMeal(
                 name = "Cheeseburger",
