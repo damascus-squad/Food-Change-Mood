@@ -9,7 +9,6 @@ import org.damascus.model.Meal
 import org.damascus.useCase.GetRandomPotatoMealsUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetRandomPotatoMealsUseCaseTest {
 
@@ -39,14 +38,7 @@ class GetRandomPotatoMealsUseCaseTest {
         //when
         val result = getRandomPotatoMealsUseCase()
         //then
-        assertThat(result.all { meals ->
-            meals.ingredients.any { ingredient ->
-                ingredient.contains(
-                    POTATO,
-                    ignoreCase = true
-                )
-            }
-        }).isTrue()
+        assertThat(containsPotatoInIngredients(result)).isTrue()
     }
 
     @Test
@@ -70,15 +62,23 @@ class GetRandomPotatoMealsUseCaseTest {
     }
 
     @Test
-    fun `should throw exception when no meals contain potato`() {
-        //given
-        every { mealRepository.getAllMeals() } returns generateNonPotatoMeals()
+    fun `should ignore meals with empty ingredient list`() {
+        //give
+        every { mealRepository.getAllMeals() } returns getMealsWithValidPotatoIngredient()
         //when
-        val exception = assertThrows<NoSuchElementException> {
-            getRandomPotatoMealsUseCase()
-        }
+        val result = getRandomPotatoMealsUseCase()
         //then
-        assertThat(exception.message).isEqualTo("🥔 No meals with potatoes found.")
+        assertThat(result.map { meal -> meal.name }).containsExactly("Baked Potato")
+    }
+
+    @Test
+    fun `should return empty list when no meals contain potato`() {
+        // given
+        every { mealRepository.getAllMeals() } returns generateNonPotatoMeals()
+        // when
+        val result = getRandomPotatoMealsUseCase()
+        // then
+        assertThat(result).isEmpty()
     }
 
     private fun createMeal(
@@ -129,6 +129,21 @@ class GetRandomPotatoMealsUseCaseTest {
             createMeal("Salad", listOf("lettuce", "tomato")),
             createMeal("Steak", listOf("beef"))
         )
+    }
+
+    private fun getMealsWithValidPotatoIngredient(): List<Meal> {
+        return listOf(
+            createMeal("Empty Ingredients Meal", emptyList()),
+            createMeal("Baked Potato", listOf("potato"))
+        )
+    }
+
+    private fun containsPotatoInIngredients(meals: List<Meal>): Boolean {
+        return meals.all { meal ->
+            meal.ingredients.any { ingredient ->
+                ingredient.contains(POTATO, ignoreCase = true)
+            }
+        }
     }
 
     companion object {
