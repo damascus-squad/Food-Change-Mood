@@ -6,8 +6,10 @@ import data.MealRepositoryImpl
 import org.damascus.data.MealDataParser
 import org.damascus.data.source.CsvMealDataSource
 import org.damascus.logic.GetFirstTenMealsUseCase
+import org.damascus.logic.GuessIngredientGame
 import org.damascus.logic.MealRepository
 import org.damascus.presentation.FoodChangeMoodUi
+import org.damascus.presentation.IngredientGameUi
 import org.damascus.useCase.*
 import org.damascus.utils.CSV_FILE_PATH
 import org.koin.dsl.module
@@ -27,6 +29,8 @@ val appModule = module {
     single { IdentifyIraqiMealsUseCase(get()) }
     single { SearchMealByNameUseCase(get()) }
     single { GetMealsByDateUseCase(get()) }
+    single { IngredientGameUi(get()) }
+    single { GuessIngredientGame(get()) }
 
     single {
         FoodChangeMoodUi(
@@ -45,7 +49,7 @@ val appModule = module {
             get(),
             get(),
             get(),
-            get()
+            get(),
         )
     }
 }

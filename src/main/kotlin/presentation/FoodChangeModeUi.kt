@@ -2,7 +2,6 @@ package org.damascus.presentation
 
 
 import org.damascus.logic.GetFirstTenMealsUseCase
-import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
 import org.damascus.useCase.*
 import org.damascus.utils.TerminalColor
@@ -11,7 +10,7 @@ import java.util.*
 
 class FoodChangeMoodUi(
     private val getFirstNMealsUseCase: GetFirstTenMealsUseCase,
-    private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase,
+    private val ingredientGame: IngredientGameUi,
     private val getEasyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
     private val getHighCalorieMealUseCase: GetHighCalorieMealUseCase,
     private val getEggFreeSweetUseCase: GetEggFreeSweetUseCase,
@@ -303,8 +302,9 @@ class FoodChangeMoodUi(
 
     private fun playIngredientGame() {
         println("🎮 Starting the Ingredient Game...".withStyle(TerminalColor.Blue))
-        val guessIngredientGame = GuessIngredientGame(getMealGameUtilsUseCase)
-        guessIngredientGame.playIngredientGame()
+//        val guessIngredientGame = GuessIngredientGame(getMealGameUtilsUseCase)
+//        guessIngredientGame.playIngredientGame()
+        ingredientGame.startGame()
     }
 
     private fun showKetoMenu(meals: List<Meal>) {
