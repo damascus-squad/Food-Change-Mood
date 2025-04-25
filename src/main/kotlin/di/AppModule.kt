@@ -26,7 +26,7 @@ val appModule = module {
     single { GetFirstTenMealsUseCase(get()) }
     single { GetEasyFoodSuggestionsUseCase(get()) }
     single { GetKetoMealUseCase(get()) }
-    single { IdentifyIraqiMealsUseCase(get()) }
+    single { IdentifyMealsByNationalityUseCase(get()) }
     single { SearchMealByNameUseCase(get()) }
     single { GetMealsByDateUseCase(get()) }
     single { IngredientGameUi(get()) }
