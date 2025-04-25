@@ -8,13 +8,12 @@ import org.damascus.model.NutritionAverages
 class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository) {
 
 
-    operator fun invoke(topMeals: Int = 10): List<String> {
+    operator fun invoke(count: Int = 10): List<Meal> {
         val meals = mealsRepository.getAllMeals()
         val averages = computeNutritionAverages(meals)
         return meals
             .filter { meal -> meal isHealthyFastFoodBy averages }
-            .take(topMeals)
-            .map { meal -> meal.name }
+            .take(count)
     }
 
     private fun List<Double?>.calculateAverage(): Double =
