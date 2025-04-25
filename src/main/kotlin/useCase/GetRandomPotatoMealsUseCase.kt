@@ -12,9 +12,8 @@ class GetRandomPotatoMealsUseCase(
         .filter { meal ->
             meal.ingredients.any { it.contains("potato", ignoreCase = true) }
         }
-        .takeIf { it.isNotEmpty() }
-        ?.let { meals ->
+        .let { meals ->
             if (meals.size <= 10) meals else meals.shuffled(Random).take(10)
         }
-        ?: throw NoSuchElementException("🥔 No meals with potatoes found.")
+
 }
