@@ -15,8 +15,6 @@ repositories {
 dependencies {
     implementation("io.insert-koin:koin-core:4.0.2")
 
-
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
     testImplementation(kotlin("test"))
 
