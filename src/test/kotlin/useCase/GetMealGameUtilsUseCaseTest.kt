@@ -3,6 +3,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.useCase.GetMealGameUtilsUseCase
 import org.junit.jupiter.api.BeforeEach
@@ -37,8 +38,8 @@ class GetMealGameUtilsUseCaseTest {
     fun `getValidMeals with no matching meals returns empty list`() {
         // Given
         val meals = listOf(
-            createTestMeal(name = "Meal1", ingredients = listOf("apple", "sugar")),
-            createTestMeal(name = "Meal2", ingredients = listOf("banana", "honey"))
+            createMeal(name = "Meal1", ingredients = listOf("apple", "sugar")),
+            createMeal(name = "Meal2", ingredients = listOf("banana", "honey"))
         )
         every { mealRepo.getAllMeals() } returns meals
 
@@ -53,9 +54,9 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getValidMeals with some matching meals returns only matching meals`() {
         // Given
-        val meal1 = createTestMeal(name = "Apple Pie", ingredients = listOf("apple", "sugar"))
-        val meal2 = createTestMeal(name = "Banana Bread", ingredients = listOf("banana", "flour"))
-        val meal3 = createTestMeal(name = "Apple Crumble", ingredients = listOf("apple", "oats"))
+        val meal1 = createMeal(name = "Apple Pie", ingredients = listOf("apple", "sugar"))
+        val meal2 = createMeal(name = "Banana Bread", ingredients = listOf("banana", "flour"))
+        val meal3 = createMeal(name = "Apple Crumble", ingredients = listOf("apple", "oats"))
         val meals = listOf(meal1, meal2, meal3)
 
         every { mealRepo.getAllMeals() } returns meals
@@ -71,8 +72,8 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getValidMeals with all matching meals returns full list`() {
         // Given
-        val meal1 = createTestMeal(name = "Meal1")
-        val meal2 = createTestMeal(name = "Meal2")
+        val meal1 = createMeal(name = "Meal1")
+        val meal2 = createMeal(name = "Meal2")
         val meals = listOf(meal1, meal2)
 
         every { mealRepo.getAllMeals() } returns meals
@@ -89,7 +90,7 @@ class GetMealGameUtilsUseCaseTest {
     fun `getWrongIngredients with empty validMeals returns empty list`() {
         // Given
         val emptyMeals = emptyList<Meal>()
-        val currentMeal = createTestMeal(ingredients = listOf("apple"))
+        val currentMeal = createMeal(ingredients = listOf("apple"))
 
         // When
         val result = useCase.getWrongIngredients(
@@ -105,10 +106,10 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getWrongIngredients with all meals same as currentRandomMeal returns empty list`() {
         // Given
-        val currentMeal = createTestMeal(id = 1, ingredients = listOf("apple", "sugar"))
+        val currentMeal = createMeal(id = 1, ingredients = listOf("apple", "sugar"))
         val validMeals = listOf(
             currentMeal,
-            createTestMeal(id = 1, ingredients = listOf("apple", "sugar")) // Same meal, different instance
+            createMeal(id = 1, ingredients = listOf("apple", "sugar")) // Same meal, different instance
         )
 
         // When
@@ -125,8 +126,8 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getWrongIngredients with not enough wrong ingredients returns all available`() {
         // Given
-        val currentMeal = createTestMeal(id = 1, ingredients = listOf("apple", "sugar"))
-        val otherMeal = createTestMeal(id = 2, ingredients = listOf("banana"))
+        val currentMeal = createMeal(id = 1, ingredients = listOf("apple", "sugar"))
+        val otherMeal = createMeal(id = 2, ingredients = listOf("banana"))
         val validMeals = listOf(currentMeal, otherMeal)
 
         // When
@@ -144,8 +145,8 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getWrongIngredients excludes correctIngredient from other meals`() {
         // Given
-        val currentMeal = createTestMeal(id = 1, ingredients = listOf("apple", "sugar"))
-        val otherMeal = createTestMeal(id = 2, ingredients = listOf("apple", "banana", "flour"))
+        val currentMeal = createMeal(id = 1, ingredients = listOf("apple", "sugar"))
+        val otherMeal = createMeal(id = 2, ingredients = listOf("apple", "banana", "flour"))
         val validMeals = listOf(currentMeal, otherMeal)
 
         // When
@@ -163,9 +164,9 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getWrongIngredients returns distinct ingredients when duplicates exist`() {
         // Given
-        val currentMeal = createTestMeal(id = 1, ingredients = listOf("apple"))
-        val meal2 = createTestMeal(id = 2, ingredients = listOf("banana", "flour"))
-        val meal3 = createTestMeal(id = 3, ingredients = listOf("banana", "cinnamon"))
+        val currentMeal = createMeal(id = 1, ingredients = listOf("apple"))
+        val meal2 = createMeal(id = 2, ingredients = listOf("banana", "flour"))
+        val meal3 = createMeal(id = 3, ingredients = listOf("banana", "cinnamon"))
         val validMeals = listOf(currentMeal, meal2, meal3)
 
         // When
@@ -183,11 +184,11 @@ class GetMealGameUtilsUseCaseTest {
     @Test
     fun `getWrongIngredients returns requested number of items when enough available`() {
         // Given
-        val currentMeal = createTestMeal(id = 1, ingredients = listOf("apple"))
+        val currentMeal = createMeal(id = 1, ingredients = listOf("apple"))
         val otherMeals = listOf(
-            createTestMeal(id = 2, ingredients = listOf("banana", "flour")),
-            createTestMeal(id = 3, ingredients = listOf("cinnamon", "sugar")),
-            createTestMeal(id = 4, ingredients = listOf("milk", "eggs"))
+            createMeal(id = 2, ingredients = listOf("banana", "flour")),
+            createMeal(id = 3, ingredients = listOf("cinnamon", "sugar")),
+            createMeal(id = 4, ingredients = listOf("milk", "eggs"))
         )
         val validMeals = listOf(currentMeal) + otherMeals
 
@@ -273,6 +274,44 @@ class GetMealGameUtilsUseCaseTest {
         assertThat(result).contains("apple")
         assertThat(result).contains("banana")
         assertThat(result).contains("sugar")
+    }
+
+    private fun createMeal(
+        name: String = "Koshry",
+        id: Int = 1,
+        minutes: Int = 15,
+        contributorId: Int = 1,
+        submitted: String = "1-1-2023",
+        tags: List<String> = listOf("original", "egyptian"),
+        nutrition: Nutrition = Nutrition(
+            calories = 1.0,
+            totalFat = 1.0,
+            sugar = 1.0,
+            sodium = 1.0,
+            protein = 1.0,
+            saturatedFat = 1.0,
+            carbohydrates = 1.0
+        ),
+        stepsCount: Int = 1,
+        steps: List<String> = listOf("cook"),
+        description: String = "Best Meal Ever",
+        ingredients: List<String> = listOf("Perfection"),
+        ingredientsCount: Int = 1
+    ): Meal {
+        return Meal(
+            name = name,
+            id = id,
+            minutes = minutes,
+            contributorId = contributorId,
+            submitted = submitted,
+            tags = tags,
+            nutrition = nutrition,
+            stepsCount = stepsCount,
+            steps = steps,
+            description = description,
+            ingredients = ingredients,
+            ingredientsCount = ingredientsCount
+        )
     }
 }
 
