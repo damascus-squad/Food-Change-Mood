@@ -24,11 +24,11 @@ class FoodChangeMoodUi(
             uiActionList = listOf(
                 UiAction(
                     name = "🇮🇶 Identify iraqi meals",
-                    action = { mealRetrieveUi.getNationalityMeals() }
+                    action = { mealRetrieveUi.displayNationalityMeals() }
                 ),
                 UiAction(
                     name = "🗓️ Search Meals By Date",
-                    action = { mealSearchUI.getByDate() }
+                    action = { mealSearchUI.displayByDate() }
                 ),
                 UiAction(
                     name = "🎮 Play Ingredient Game",
@@ -40,47 +40,47 @@ class FoodChangeMoodUi(
                 ),
                 UiAction(
                     name = "🔍Search Meals by Name",
-                    action = { mealSearchUI.getByName() }
+                    action = { mealSearchUI.displayByName() }
                 ),
                 UiAction(
                     name = "🥩 Display a Keto Diet Meal",
-                    action = { mealSuggestUi.getKetoMeals() }
+                    action = { mealSuggestUi.displayKetoMeals() }
                 ),
                 UiAction(
                     name = "🔋 Show High Calorie Meals",
-                    action = { mealSuggestUi.getHighCalorieMeal() }
+                    action = { mealSuggestUi.displayHighCalorieMeal() }
                 ),
                 UiAction(
                     name = "🍬 Get Egg-Free Sweet",
-                    action = { mealSuggestUi.getEggFreeSweet() }
+                    action = { mealSuggestUi.displayEggFreeSweet() }
                 ),
                 UiAction(
                     name = "🍳 Easy Food Suggestion",
-                    action = { mealRetrieveUi.getEasyFood() }
+                    action = { mealRetrieveUi.displayEasyFood() }
                 ),
                 UiAction(
                     name = "🥔 Display Random 10 Meals That Contain Potato",
-                    action = { mealRetrieveUi.getPotatoMeals() }
+                    action = { mealRetrieveUi.displayPotatoMeals() }
                 ),
                 UiAction(
                     name = "🌍 Explore Country Meals",
-                    action = { mealSearchUI.getByCountry() }
+                    action = { mealSearchUI.displayByCountry() }
                 ),
                 UiAction(
                     name = "🍝 Display Italian Meals",
-                    action = { mealRetrieveUi.getItalianMeals() }
+                    action = { mealRetrieveUi.displayItalianMeals() }
                 ),
                 UiAction(
                     name = "🍔 Display Healthy Meals (Low fat, low carbs, <15 min)",
-                    action = { mealRetrieveUi.getHealthyMeal() }
+                    action = { mealRetrieveUi.displayHealthyMeal() }
                 ),
                 UiAction(
                     name = "🐟 Display Seafood Meals",
-                    action = { mealRetrieveUi.getSeafoodMeal() }
+                    action = { mealRetrieveUi.displaySeafoodMeal() }
                 ),
                 UiAction(
                     name = "🏋️ Gym Helper Find meals by calories and protein",
-                    action = { mealSearchUI.getByCaloriesAndProtein() }
+                    action = { mealSearchUI.displayByCaloriesAndProtein() }
                 )))
     }
 

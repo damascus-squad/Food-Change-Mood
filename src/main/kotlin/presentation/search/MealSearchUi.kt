@@ -18,7 +18,7 @@ class MealSearchUi(
     private val consoleDisplay: ConsoleDisplay
 ) : MealSearch {
 
-    override fun getByName() {
+    override fun displayByName() {
         val mealName = consoleUserInput.readString("Please enter the search phrase: ")
         consoleDisplay.displayMealsBy(
             meals = searchMealByNameUseCase(mealName),
@@ -26,7 +26,7 @@ class MealSearchUi(
         ) { meal -> mapOf("Name" to meal.name) }
     }
 
-    override fun getByCountry() {
+    override fun displayByCountry() {
         val country = consoleUserInput.readString("🌍 Enter the country name:")
         val meals = exploreOtherCountriesFoodUseCase.getCountryFood(country, limit = 20)
         println("✅ Found ${meals.size} meal(s) for '${country}".withStyle(TerminalColor.Green))
@@ -36,7 +36,7 @@ class MealSearchUi(
         ) { meal -> mapOf("Name" to meal.name) }
     }
 
-    override fun getByDate() {
+    override fun displayByDate() {
         val date = consoleUserInput.readString("📅 Enter date (yyyy-MM-dd):")
         try {
             consoleDisplay.displayMealsBy(
@@ -54,7 +54,7 @@ class MealSearchUi(
         }
     }
 
-    override fun getByCaloriesAndProtein() {
+    override fun displayByCaloriesAndProtein() {
         val targetCalories: Double = consoleUserInput.readDouble("Enter Calories amount: ")
         val targetProtein: Double = consoleUserInput.readDouble("Enter Protein amount: ")
         val result = findMealsByCaloriesAndProtein(targetCalories = targetCalories, targetProtein = targetProtein)

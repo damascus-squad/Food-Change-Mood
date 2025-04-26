@@ -17,7 +17,7 @@ class MealSuggestUi(
     private val consoleUserInput: ConsoleUserInput
 ) : MealSuggest {
 
-    override fun getEggFreeSweet() {
+    override fun displayEggFreeSweet() {
         while (true) {
             try {
                 val meal = eggFreeSweetUseCase()
@@ -43,7 +43,7 @@ class MealSuggestUi(
         }
     }
 
-    override fun getHighCalorieMeal() {
+    override fun displayHighCalorieMeal() {
         while (true) {
             try {
                 val meals = highCalorieMealUseCase()
@@ -73,7 +73,7 @@ class MealSuggestUi(
         }
     }
 
-    override fun getKetoMeals() {
+    override fun displayKetoMeals() {
         val notShownMeals = ketoMealUseCase().shuffled().toMutableList()
 
         var suggestion: Meal
