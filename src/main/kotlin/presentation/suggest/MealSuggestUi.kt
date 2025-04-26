@@ -1,11 +1,11 @@
 package org.damascus.presentation.suggest
 
 import org.damascus.model.Meal
-import org.damascus.presentation.utils.ConsoleDisplay
-import org.damascus.presentation.utils.ConsoleUserInput
-import org.damascus.useCase.GetEggFreeSweetUseCase
-import org.damascus.useCase.GetHighCalorieMealUseCase
-import org.damascus.useCase.GetKetoMealUseCase
+import org.damascus.presentation.io.ConsoleDisplay
+import org.damascus.presentation.io.ConsoleUserInput
+import org.damascus.useCase.suggest.GetEggFreeSweetUseCase
+import org.damascus.useCase.suggest.GetHighCalorieMealUseCase
+import org.damascus.useCase.suggest.GetKetoMealUseCase
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
 
@@ -21,15 +21,19 @@ class MealSuggestUi(
         while (true) {
             try {
                 val meal = eggFreeSweetUseCase()
-                println("\nEgg-Free Sweet".withStyle(TerminalColor.Blue))
+                println("\nEgg-Free Sweet".withStyle(TerminalColor.Yellow))
                 println("Name: ${meal.name}".withStyle(TerminalColor.Blue))
                 println("Description: ${meal.description.take(150)}...".withStyle(TerminalColor.Blue))
 
                 if (consoleUserInput.readBoolean()) {
-                    consoleDisplay.specificMeal(meal)
+                    consoleDisplay.displayMealsBy(
+                        meals = listOf(meal),
+                        label = "Egg Free Sweet"
+                    )
                     return
                 } else {
-                    println("Fetching another one...".withStyle(TerminalColor.Red))
+                    println("Fetching another one...".withStyle(TerminalColor.Cyan))
+                    continue
                 }
 
             } catch (e: NoSuchElementException) {
@@ -45,16 +49,19 @@ class MealSuggestUi(
                 val meals = highCalorieMealUseCase()
 
                 for (meal in meals) {
-                    println("\nHigh Calorie Meal".withStyle(TerminalColor.Blue))
+                    println("\nHigh Calorie Meal".withStyle(TerminalColor.Yellow))
                     println("Name: ${meal.name}".withStyle(TerminalColor.Blue))
                     println("Calories: ${meal.nutrition.calories}".withStyle(TerminalColor.Blue))
                     println("Description: ${meal.description.take(150)}...".withStyle(TerminalColor.Blue))
 
                     if (consoleUserInput.readBoolean()) {
-                        consoleDisplay.specificMeal(meal)
+                        consoleDisplay.displayMealsBy(
+                            meals = listOf(meal),
+                            label = "High Calorie Meal"
+                        )
                         return
                     } else {
-                        println("Skipping...".withStyle(TerminalColor.Green))
+                        println("Fetching another one...".withStyle(TerminalColor.Cyan))
                         continue
                     }
                 }
@@ -65,7 +72,6 @@ class MealSuggestUi(
             }
         }
     }
-
 
     override fun getKetoMeals() {
         val notShownMeals = ketoMealUseCase().shuffled().toMutableList()
@@ -88,16 +94,16 @@ class MealSuggestUi(
             )
 
             if (consoleUserInput.readBoolean()) {
-                (consoleDisplay.meals(listOf(suggestion)))
+                (consoleDisplay.displayMealsBy(
+                    meals = listOf(suggestion),
+                    label = "Keto Meal"
+                )
+                        )
                 return
             } else {
-                println("Skipping...".withStyle(TerminalColor.Green))
+                println("Fetching another one...".withStyle(TerminalColor.Cyan))
                 continue
             }
         }
-    }
-
-    override fun getEasyFood() {
-        TODO("Not yet implemented")
     }
 }

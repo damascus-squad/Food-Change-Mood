@@ -6,7 +6,7 @@ import io.mockk.mockk
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.SearchMealByNameUseCase
+import org.damascus.useCase.search.SearchMealByNameUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest

@@ -4,5 +4,4 @@ interface MealSuggest {
     fun getEggFreeSweet()
     fun getHighCalorieMeal()
     fun getKetoMeals()
-    fun getEasyFood()
 }

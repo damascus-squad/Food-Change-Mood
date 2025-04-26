@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import org.damascus.logic.MealRepository
-import org.damascus.useCase.GetEasyFoodSuggestionsUseCase
+import org.damascus.useCase.retrieve.GetEasyFoodSuggestionsUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

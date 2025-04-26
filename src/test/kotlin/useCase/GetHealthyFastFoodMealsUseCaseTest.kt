@@ -6,7 +6,7 @@ import io.mockk.mockk
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.GetHealthyFastFoodMealsUseCase
+import org.damascus.useCase.retrieve.GetHealthyFastFoodMealsUseCase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test

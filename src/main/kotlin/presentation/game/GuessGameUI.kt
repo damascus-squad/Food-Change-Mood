@@ -1,6 +1,6 @@
 package org.damascus.presentation.game
 
-import org.damascus.useCase.GetRandomMealUseCase
+import org.damascus.useCase.game.GetRandomMealUseCase
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
 import java.util.*

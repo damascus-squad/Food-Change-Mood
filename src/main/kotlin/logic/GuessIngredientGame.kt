@@ -3,7 +3,7 @@ package org.damascus.logic
 import org.damascus.model.GameResult
 import org.damascus.model.Meal
 import org.damascus.model.MealOptions
-import org.damascus.useCase.GetMealGameUtilsUseCase
+import org.damascus.useCase.suggest.GetMealGameUtilsUseCase
 
 class GuessIngredientGame(
     private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase

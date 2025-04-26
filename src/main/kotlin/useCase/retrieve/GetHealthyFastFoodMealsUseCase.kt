@@ -1,4 +1,4 @@
-package org.damascus.useCase
+package org.damascus.useCase.retrieve
 
 import model.Nutrition
 import org.damascus.logic.MealRepository

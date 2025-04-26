@@ -1,4 +1,4 @@
-package org.damascus.presentation.fetch
+package org.damascus.presentation.retrieve
 
 interface MealRetrieve {
     fun getNationalityMeals()
@@ -6,4 +6,5 @@ interface MealRetrieve {
     fun getHealthyMeal()
     fun getSeafoodMeal()
     fun getItalianMeals()
+    fun getEasyFood()
 }

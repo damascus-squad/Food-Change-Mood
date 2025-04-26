@@ -8,7 +8,7 @@ import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
 import org.damascus.model.MealOptions
-import org.damascus.useCase.GetMealGameUtilsUseCase
+import org.damascus.useCase.suggest.GetMealGameUtilsUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

@@ -2,15 +2,18 @@ package org.damascus.presentation.game
 
 import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.GameResult
+import org.damascus.useCase.suggest.GetMealGameUtilsUseCase
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
 
 class IngredientGameUi(
-    private val gameLogic: GuessIngredientGame
+    private val getMealGameUtilsUseCase: GetMealGameUtilsUseCase
 ) : Game {
 
     override fun start() {
         println("🎉 Welcome to the Ultimate Ingredient Game! 🍔🌮🥗")
+
+        val gameLogic = GuessIngredientGame(getMealGameUtilsUseCase)
 
         val gameResult = gameLogic.playIngredientGame(
             getUserChoice = ::getUserChoice,

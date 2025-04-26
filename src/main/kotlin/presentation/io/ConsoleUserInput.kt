@@ -1,6 +1,7 @@
-package org.damascus.presentation.utils
+package org.damascus.presentation.io
 
 import org.damascus.domain.InputException
+import org.damascus.presentation.utils.InputReader
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
 
@@ -18,23 +19,23 @@ class ConsoleUserInput : InputReader {
     }
 
     override fun readInt(prompt: String, min: Int?, max: Int?): Int {
-        print("$prompt ")
-        val input = readlnOrNull()?.trim()?.toIntOrNull() ?: throw InputException("Wrong input: ")
+        print("$prompt ".withStyle(TerminalColor.Blue))
+        while (true) {
+            val input = readlnOrNull()?.trim()?.toIntOrNull() ?: throw InputException("Wrong input: ")
 
-        if ((min != null && input < min) || (max != null && input > max)) {
-            throw InputException("الإدخال خارج النطاق المسموح.")
+            if ((min != null && input < min) || (max != null && input > max)) {
+                println("❌ Invalid input. Try again.\n".withStyle(TerminalColor.Red))
+            } else return input
         }
-
-        return input
     }
 
     override fun readBoolean(): Boolean {
         while (true) {
-            print("Do you like it? (y/n): ".withStyle(TerminalColor.Green))
+            print("Do you like it? (y/n): ".withStyle(TerminalColor.Magenta))
             when (readlnOrNull()?.trim()?.lowercase()) {
                 "y" -> return true
                 "n" -> return false
-                else -> println("Invalid input. Please enter 'y' or 'n'.".withStyle(TerminalColor.Red))
+                else -> println("❌ Invalid input. Please enter 'y' or 'n'.".withStyle(TerminalColor.Red))
             }
         }
     }

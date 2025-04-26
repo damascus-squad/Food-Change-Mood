@@ -6,7 +6,7 @@ import io.mockk.mockk
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.GetItalianLargeGroupMealsUseCase
+import org.damascus.useCase.retrieve.GetItalianLargeGroupMealsUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
