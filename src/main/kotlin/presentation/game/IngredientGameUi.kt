@@ -1,4 +1,4 @@
-package org.damascus.presentation
+package org.damascus.presentation.game
 
 import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.GameResult
@@ -7,9 +7,9 @@ import org.damascus.utils.withStyle
 
 class IngredientGameUi(
     private val gameLogic: GuessIngredientGame
-) {
+) : Game {
 
-    fun startGame() {
+    override fun start() {
         println("🎉 Welcome to the Ultimate Ingredient Game! 🍔🌮🥗")
 
         val gameResult = gameLogic.playIngredientGame(

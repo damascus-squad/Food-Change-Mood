@@ -1,6 +1,5 @@
 package org.damascus.di
 
-import org.damascus.logic.GetFirstTenMealsUseCase
 import org.damascus.useCase.*
 import org.koin.dsl.module
 
@@ -8,7 +7,6 @@ val useCaseModule = module {
     single { ExploreOtherCountriesFoodUseCase(get()) }
     single { GetEasyFoodSuggestionsUseCase(get()) }
     single { GetEggFreeSweetUseCase(get()) }
-    single { GetFirstTenMealsUseCase(get()) }
     single { GetHealthyFastFoodMealsUseCase(get()) }
     single { GetHighCalorieMealUseCase(get()) }
     single { GetItalianLargeGroupMealsUseCase(get()) }
