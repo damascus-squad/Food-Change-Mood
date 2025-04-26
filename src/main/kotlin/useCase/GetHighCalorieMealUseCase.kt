@@ -8,11 +8,11 @@ class GetHighCalorieMealUseCase(
 ) {
     private val suggestedHighCalorieMeals = mutableSetOf<Int>()
 
-    operator fun invoke(): List<Meal> {
+    operator fun invoke(threshold: Int = 700): List<Meal> {
         val allMeals = mealRepo.getAllMeals()
 
         val highCalMeals = allMeals.filter {
-            it.nutrition.calories > 700 && !suggestedHighCalorieMeals.contains(it.id)
+            it.nutrition.calories > threshold && !suggestedHighCalorieMeals.contains(it.id)
         }
 
         if (highCalMeals.isEmpty()) throw NoSuchElementException("No more high-calorie meals.")
