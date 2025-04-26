@@ -8,7 +8,7 @@ import io.mockk.verify
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.GetEggFreeSweetUseCase
+import org.damascus.useCase.suggest.GetEggFreeSweetUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

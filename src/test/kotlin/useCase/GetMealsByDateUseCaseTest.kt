@@ -8,7 +8,7 @@ import org.damascus.domain.IllegalDateFormatException
 import org.damascus.domain.NoSuchMealException
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.GetMealsByDateUseCase
+import org.damascus.useCase.search.GetMealsByDateUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows

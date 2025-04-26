@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import mealHelper.createMeal
 import org.damascus.logic.MealRepository
-import org.damascus.useCase.SortSeafoodMealsByContentUseCase
+import org.damascus.useCase.retrieve.SortSeafoodMealsByContentUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import mealHelper.createMeal
 import org.damascus.logic.MealRepository
-import org.damascus.useCase.ExploreOtherCountriesFoodUseCase
+import org.damascus.useCase.search.ExploreOtherCountriesFoodUseCase
 import org.junit.jupiter.api.BeforeEach
 import kotlin.test.Test
 

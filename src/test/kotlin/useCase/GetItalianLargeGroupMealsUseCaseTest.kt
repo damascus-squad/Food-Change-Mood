@@ -6,7 +6,7 @@ import io.mockk.mockk
 import model.Nutrition
 import org.damascus.logic.MealRepository
 import org.damascus.model.Meal
-import org.damascus.useCase.GetItalianLargeGroupMealsUseCase
+import org.damascus.useCase.retrieve.GetItalianLargeGroupMealsUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -36,7 +36,7 @@ class GetItalianLargeGroupMealsUseCaseTest {
     }
 
     @Test
-    fun `should return a list of meals only when matching tags and description are found`() {
+    fun `should return a list of meals only when matching name, tags & description are found`() {
         // Given
         every { mealRepository.getAllMeals() } returns getListOfMealsWithTags()
 
@@ -46,8 +46,8 @@ class GetItalianLargeGroupMealsUseCaseTest {
         // Then
         assertThat(matches).isEqualTo(
             listOf(
-                defaultMeal(tags = listOf("for-large-groups", "old"), description = "Original italian"),
-                defaultMeal(tags = listOf("italian", "for-large-groups", "trendy"), description = "Original meal")
+                defaultMeal(name = "italian pasta", tags = listOf("for-large-groups", "old"), description = "Original"),
+                defaultMeal(tags = listOf("for-large-groups", "trendy"), description = "Original ITALIAN meal")
             )
         )
     }
@@ -160,9 +160,9 @@ class GetItalianLargeGroupMealsUseCaseTest {
     private fun getListOfMealsWithTags(): List<Meal> {
         return listOf(
             defaultMeal(tags = listOf("spicy", "small")),
-            defaultMeal(tags = listOf("for-large-groups", "old"), description = "Original italian"),
+            defaultMeal(name = "italian pasta", tags = listOf("for-large-groups", "old"), description = "Original"),
             defaultMeal(tags = listOf("salty", "for-large-groups")),
-            defaultMeal(tags = listOf("italian", "for-large-groups", "trendy"), description = "Original meal")
+            defaultMeal(tags = listOf("for-large-groups", "trendy"), description = "Original ITALIAN meal")
         )
     }
 
@@ -179,7 +179,7 @@ class GetItalianLargeGroupMealsUseCaseTest {
         List(4) { defaultMeal(tags = listOf("italian"), description = "original meal") }
 
     private fun getListOfMealsWithoutOriginalDescription(): List<Meal> =
-        List(4) { defaultMeal(tags = listOf("italian", "for-large-groups")) }
+        List(4) { defaultMeal(name = "italian pasta", tags = listOf("for-large-groups")) }
 
     private fun getListOfMealsWithMatchingDescriptionAndLargeGroupsTag(): List<Meal> {
         return listOf(

@@ -6,7 +6,7 @@ import model.Nutrition
 import org.damascus.logic.GuessIngredientGame
 import org.damascus.model.Meal
 import org.damascus.model.MealOptions
-import org.damascus.useCase.GetMealGameUtilsUseCase
+import org.damascus.useCase.suggest.GetMealGameUtilsUseCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
