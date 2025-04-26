@@ -32,7 +32,7 @@ class GetHealthyFastFoodMealsUseCase(private val mealsRepository: MealRepository
                 && carbohydrates < averages.averageCarbs
     }
 
-    private infix fun Meal.isHealthyFastFoodBy(averages: NutritionAverages): Boolean  {
+    private infix fun Meal.isHealthyFastFoodBy(averages: NutritionAverages): Boolean {
         return minutes <= MAXIMUM_MINUTES_TO_PREPARE_MEAL
                 && nutrition isNutritionallyBetterThan averages
 

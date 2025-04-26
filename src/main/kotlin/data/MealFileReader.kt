@@ -7,7 +7,7 @@ import java.io.IOException
 class MealFileReader {
     fun readLinesFromFile(): List<String> {
         val lines = mutableListOf<String>()
-        val reader =getCsvFile().bufferedReader()
+        val reader = getCsvFile().bufferedReader()
 
         var currentLine = StringBuilder()
         var insideQuotes = false
@@ -32,7 +32,7 @@ class MealFileReader {
     }
 
     private fun getCsvFile(): File {
-            val foodCsvFile = File(CSV_FILE_PATH)
+        val foodCsvFile = File(CSV_FILE_PATH)
         if (foodCsvFile.exists()) {
             return foodCsvFile
         }

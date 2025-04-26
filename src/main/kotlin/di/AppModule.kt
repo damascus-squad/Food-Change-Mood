@@ -13,9 +13,8 @@ import org.damascus.presentation.game.GuessGameUI
 import org.damascus.presentation.game.IngredientGameUi
 import org.damascus.presentation.search.MealSearchUi
 import org.damascus.presentation.suggest.MealSuggestUi
-import org.damascus.presentation.utils.ConsoleUserInput
 import org.damascus.presentation.utils.ConsoleDisplay
-import org.damascus.useCase.*
+import org.damascus.presentation.utils.ConsoleUserInput
 import org.damascus.utils.CSV_FILE_PATH
 import org.koin.dsl.module
 import java.io.File
@@ -34,9 +33,9 @@ val appModule = module {
     single { ConsoleUserInput() }
     single { ConsoleDisplay() }
     single { GuessGameUI(get()) }
-    single { MealSearchUi(get(),get(),get(),get(),get(),get()) }
-    single { MealSuggestUi(get(),get(), get(),get(),get())}
-    single { MealRetrieveUi(get(),get(), get(),get(),get(),get()) }
+    single { MealSearchUi(get(), get(), get(), get(), get(), get()) }
+    single { MealSuggestUi(get(), get(), get(), get(), get()) }
+    single { MealRetrieveUi(get(), get(), get(), get(), get(), get()) }
 
     single {
         FoodChangeMoodUi(

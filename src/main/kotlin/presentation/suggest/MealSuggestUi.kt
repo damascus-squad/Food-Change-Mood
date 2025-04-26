@@ -3,7 +3,9 @@ package org.damascus.presentation.suggest
 import org.damascus.model.Meal
 import org.damascus.presentation.utils.ConsoleDisplay
 import org.damascus.presentation.utils.ConsoleUserInput
-import org.damascus.useCase.*
+import org.damascus.useCase.GetEggFreeSweetUseCase
+import org.damascus.useCase.GetHighCalorieMealUseCase
+import org.damascus.useCase.GetKetoMealUseCase
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
 
@@ -37,7 +39,7 @@ class MealSuggestUi(
         }
     }
 
-    override fun getHighCalorieMeal(){
+    override fun getHighCalorieMeal() {
         while (true) {
             try {
                 val meals = highCalorieMealUseCase()

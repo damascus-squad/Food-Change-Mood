@@ -1,15 +1,16 @@
 package useCase
+
 import com.google.common.truth.Truth.assertThat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import model.Nutrition
 import org.damascus.logic.MealRepository
+import org.damascus.model.Meal
+import org.damascus.model.MealOptions
 import org.damascus.useCase.GetMealGameUtilsUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.damascus.model.Meal
-import org.damascus.model.MealOptions
 
 class GetMealGameUtilsUseCaseTest {
     private lateinit var mealRepo: MealRepository

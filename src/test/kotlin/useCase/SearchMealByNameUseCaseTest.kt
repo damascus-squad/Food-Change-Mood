@@ -24,7 +24,7 @@ class SearchMealByNameUseCaseTest {
     }
 
     @Test
-    fun `should return exact match`(){
+    fun `should return exact match`() {
         //Given
         every { mealRepository.getAllMeals() } returns fakeMeals
 
@@ -36,7 +36,7 @@ class SearchMealByNameUseCaseTest {
     }
 
     @Test
-    fun `should return fuzzy match with small typo`(){
+    fun `should return fuzzy match with small typo`() {
         //Given
         every { mealRepository.getAllMeals() } returns fakeMeals
 
@@ -51,7 +51,7 @@ class SearchMealByNameUseCaseTest {
     }
 
     @Test
-    fun `should return results are sorted by fewest errors then earliest index`(){
+    fun `should return results are sorted by fewest errors then earliest index`() {
         //Given
         every { mealRepository.getAllMeals() } returns fakeMeals
 
@@ -69,7 +69,7 @@ class SearchMealByNameUseCaseTest {
     }
 
     @Test
-    fun `returns empty list when no match found`(){
+    fun `returns empty list when no match found`() {
         //Given
         every { mealRepository.getAllMeals() } returns fakeMeals
 
@@ -81,7 +81,7 @@ class SearchMealByNameUseCaseTest {
     }
 
     @Test
-    fun `should return empty list when the pattern empty`(){
+    fun `should return empty list when the pattern empty`() {
         //Given
         every { mealRepository.getAllMeals() } returns fakeMeals
 
@@ -93,7 +93,7 @@ class SearchMealByNameUseCaseTest {
     }
 
     @Test
-    fun `should throws exception for long search phrase`(){
+    fun `should throws exception for long search phrase`() {
         //Given
         every { mealRepository.getAllMeals() } returns fakeMeals
 
@@ -142,7 +142,7 @@ class SearchMealByNameUseCaseTest {
 
     private fun fakeNutrition() = Nutrition(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
-    private fun createMeal( name: String ): Meal {
+    private fun createMeal(name: String): Meal {
         return Meal(
             name = name,
             id = 1,

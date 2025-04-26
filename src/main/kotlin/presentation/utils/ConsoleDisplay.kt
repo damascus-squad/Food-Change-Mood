@@ -4,7 +4,7 @@ import org.damascus.model.Meal
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
 
-class ConsoleDisplay: Display{
+class ConsoleDisplay : Display {
 
     override fun meals(meals: List<Meal>) {
         meals.forEachIndexed { _, meal ->

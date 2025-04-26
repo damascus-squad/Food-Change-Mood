@@ -239,7 +239,8 @@ class GetKetoMealUseCaseTest {
                 name = "Less Than Min Total Fat", nutrition = defaultNutrition(
                     calories = 500.0, carbohydrates = 10.0, totalFat = -1.0, protein = 25.0
                 )
-            ), defaultMeal(
+            ),
+            defaultMeal(
                 name = "Less Than Min Protein", nutrition = defaultNutrition(
                     calories = 500.0, carbohydrates = 10.0, totalFat = 40.0, protein = -1.0
                 )

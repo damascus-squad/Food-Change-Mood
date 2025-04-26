@@ -8,7 +8,6 @@ import org.damascus.useCase.GetMealsByDateUseCase
 import org.damascus.useCase.SearchMealByNameUseCase
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle
-import java.util.NoSuchElementException
 
 class MealSearchUi(
     private val consoleUserInput: ConsoleUserInput,

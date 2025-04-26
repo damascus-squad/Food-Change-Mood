@@ -12,8 +12,8 @@ val useCaseModule = module {
     single { GetItalianLargeGroupMealsUseCase(get()) }
     single { GetKetoMealUseCase(get()) }
     single { GetMealGameUtilsUseCase(get()) }
-    single { GetMealsByDateUseCase(get())}
-    single { GetRandomMealUseCase(get() ) }
+    single { GetMealsByDateUseCase(get()) }
+    single { GetRandomMealUseCase(get()) }
     single { GetRandomPotatoMealsUseCase(get()) }
     single { IdentifyMealsByNationalityUseCase(get()) }
     single { SearchMealByNameUseCase(get()) }

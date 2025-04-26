@@ -45,7 +45,7 @@ class SearchMealByNameUseCase(
      * @param maxErrors The maximum number of allowed errors/differences
      * @return List of starting indices where matches were found
      */
-    private fun bitapFuzzySearch(text: String, pattern: String, maxErrors: Int ): List<TextMatchResult> {
+    private fun bitapFuzzySearch(text: String, pattern: String, maxErrors: Int): List<TextMatchResult> {
 
         val patternLength = pattern.length
 

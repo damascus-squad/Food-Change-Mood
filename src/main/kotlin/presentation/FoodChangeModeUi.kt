@@ -41,7 +41,7 @@ class FoodChangeMoodUi(
                 ),
                 UiAction(
                     name = "Search Meals by Name".withStyle(TerminalColor.Green),
-                    action = { mealSearchUI.getByName()}
+                    action = { mealSearchUI.getByName() }
                 ),
                 UiAction(
                     name = "Display a Keto Diet Meal".withStyle(TerminalColor.Green),
@@ -49,7 +49,7 @@ class FoodChangeMoodUi(
                 ),
                 UiAction(
                     name = "Show High Calorie Meals".withStyle(TerminalColor.Green),
-                    action = { mealSuggestUi.getHighCalorieMeal()}
+                    action = { mealSuggestUi.getHighCalorieMeal() }
                 ),
                 UiAction(
                     name = "Get Egg-Free Sweet".withStyle(TerminalColor.Green),
@@ -61,7 +61,7 @@ class FoodChangeMoodUi(
                 ),
                 UiAction(
                     name = "Display Random 10 Meals That Contain Potato".withStyle(TerminalColor.Green),
-                    action = { mealRetrieveUi.getPotatoMeals()}
+                    action = { mealRetrieveUi.getPotatoMeals() }
                 ),
                 UiAction(
                     name = "Explore Country Meals".withStyle(TerminalColor.Green),
@@ -73,15 +73,15 @@ class FoodChangeMoodUi(
                 ),
                 UiAction(
                     name = "Display Healthy Meals".withStyle(TerminalColor.Green),
-                    action = { mealRetrieveUi.getHealthyMeal()}
+                    action = { mealRetrieveUi.getHealthyMeal() }
                 ),
                 UiAction(
                     name = "Display Seafood Meals".withStyle(TerminalColor.Green),
-                    action = { mealRetrieveUi.getSeafoodMeal()}
+                    action = { mealRetrieveUi.getSeafoodMeal() }
                 ),
                 UiAction(
                     name = "Find meals by calories and protein".withStyle(TerminalColor.Green),
-                    action = { mealSearchUI.getByCaloriesAndProtein()}
+                    action = { mealSearchUI.getByCaloriesAndProtein() }
                 )
             )
         )

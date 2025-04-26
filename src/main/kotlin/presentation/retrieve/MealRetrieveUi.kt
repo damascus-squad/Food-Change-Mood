@@ -10,7 +10,7 @@ class MealRetrieveUi(
     private val healthyFastFoodMealsUseCase: GetHealthyFastFoodMealsUseCase,
     private val seafoodMealsByContentUseCase: SortSeafoodMealsByContentUseCase,
     private val italianLargeGroupMealsUseCase: GetItalianLargeGroupMealsUseCase
-) : MealRetrieve{
+) : MealRetrieve {
     override fun getNationalityMeals() {
         consoleDisplay.mealsName(identifyMealsByNationalityUseCase())
     }

@@ -1,6 +1,6 @@
 package org.damascus.data
 
-import model.*
+import model.Nutrition
 import org.damascus.data.utils.FoodColumnIndex
 import org.damascus.data.utils.NutritionIndex
 import org.damascus.model.Meal
@@ -54,13 +54,14 @@ class MealDataParser {
     }
 
     private fun parseListOfData(raw: String): List<String> {
-        return  raw
+        return raw
             .split(",")
             .map {
                 it.replace("'", "")
-                .replace("\"", "")
-                .replace("[","")
-                .replace("]","").trim() }
+                    .replace("\"", "")
+                    .replace("[", "")
+                    .replace("]", "").trim()
+            }
             .filter { it.isNotBlank() }
     }
 
