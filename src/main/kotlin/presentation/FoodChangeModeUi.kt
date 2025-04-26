@@ -252,21 +252,25 @@ class FoodChangeMoodUi(
     }
 
     private fun printHighCalorieMeal() {
+        var firstMeal : Meal
         while (true) {
             try {
-                val meals = getHighCalorieMealUseCase()
+                val meals = getHighCalorieMealUseCase().shuffled().toMutableList()
 
-                for (meal in meals) {
+                while (meals.isNotEmpty()) {
+                    firstMeal = meals[0]
                     println("\nHigh Calorie Meal".withStyle(TerminalColor.Blue))
-                    println("Name: ${meal.name}".withStyle(TerminalColor.Blue))
-                    println("Calories: ${meal.nutrition.calories}".withStyle(TerminalColor.Blue))
-                    println("Description: ${meal.description.take(150)}...".withStyle(TerminalColor.Blue))
+                    println("Name: ${firstMeal.name}".withStyle(TerminalColor.Blue))
+                    println("Calories: ${firstMeal.nutrition.calories}".withStyle(TerminalColor.Blue))
+                    println("Description: ${firstMeal.description.take(150)}...".withStyle(TerminalColor.Blue))
 
                     if (askUserToLike()) {
-                        printMealDetails(meal)
+                        printMealDetails(firstMeal)
+                        meals.removeAt(0)
                         return
                     } else {
                         println("Skipping...".withStyle(TerminalColor.Green))
+                        meals.removeAt(0)
                         continue
                     }
                 }
