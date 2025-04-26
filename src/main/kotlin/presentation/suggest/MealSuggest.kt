@@ -1,7 +1,7 @@
 package org.damascus.presentation.suggest
 
 interface MealSuggest {
-    fun getEggFreeSweet()
-    fun getHighCalorieMeal()
-    fun getKetoMeals()
+    fun displayEggFreeSweet()
+    fun displayHighCalorieMeal()
+    fun displayKetoMeals()
 }

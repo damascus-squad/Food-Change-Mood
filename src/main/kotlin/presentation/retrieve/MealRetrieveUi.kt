@@ -13,42 +13,42 @@ class MealRetrieveUi(
     private val easyFoodSuggestionsUseCase: GetEasyFoodSuggestionsUseCase,
 ) : MealRetrieve {
 
-    override fun getNationalityMeals() {
+    override fun displayNationalityMeals() {
         consoleDisplay.displayMealsBy(
             meals = identifyMealsByNationalityUseCase(),
             label = "Nationality"
         ) { meal -> mapOf("Name" to meal.name) }
     }
 
-    override fun getPotatoMeals() {
+    override fun displayPotatoMeals() {
         consoleDisplay.displayMealsBy(
             meals = potatoMealsUseCase(),
             label = "Potato Meals"
         ) { meal -> mapOf("Name" to meal.name) }
     }
 
-    override fun getHealthyMeal() {
+    override fun displayHealthyMeal() {
         return consoleDisplay.displayMealsBy(
             meals = healthyFastFoodMealsUseCase(),
             label = "Healthy Meals"
         )
     }
 
-    override fun getSeafoodMeal() {
+    override fun displaySeafoodMeal() {
         consoleDisplay.displayMealsBy(
             meals = seafoodMealsByContentUseCase(),
             label = "Seafood"
         ) { meal -> mapOf("Name" to meal.name) }
     }
 
-    override fun getItalianMeals() {
+    override fun displayItalianMeals() {
         consoleDisplay.displayMealsBy(
             meals = italianLargeGroupMealsUseCase(),
             label = "Italian Meals"
         ) { meal -> mapOf("Name" to meal.name) }
     }
 
-    override fun getEasyFood() {
+    override fun displayEasyFood() {
         consoleDisplay.displayMealsBy(
             meals = easyFoodSuggestionsUseCase(),
             label = "Italian Meals"
