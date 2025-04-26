@@ -3,8 +3,8 @@ package org.damascus.presentation.suggest
 import org.damascus.model.Meal
 import org.damascus.presentation.io.ConsoleDisplay
 import org.damascus.presentation.io.ConsoleUserInput
+import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.suggest.GetEggFreeSweetUseCase
-import org.damascus.useCase.suggest.GetHighCalorieMealUseCase
 import org.damascus.useCase.suggest.GetKetoMealUseCase
 import org.damascus.utils.TerminalColor
 import org.damascus.utils.withStyle

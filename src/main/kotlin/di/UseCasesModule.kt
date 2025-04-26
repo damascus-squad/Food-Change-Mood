@@ -1,5 +1,6 @@
 package org.damascus.di
 
+import org.damascus.useCase.GetHighCalorieMealUseCase
 import org.damascus.useCase.game.GetRandomMealUseCase
 import org.damascus.useCase.retrieve.*
 import org.damascus.useCase.search.ExploreOtherCountriesFoodUseCase
@@ -7,7 +8,6 @@ import org.damascus.useCase.search.FindMealsByCaloriesAndProtein
 import org.damascus.useCase.search.GetMealsByDateUseCase
 import org.damascus.useCase.search.SearchMealByNameUseCase
 import org.damascus.useCase.suggest.GetEggFreeSweetUseCase
-import org.damascus.useCase.suggest.GetHighCalorieMealUseCase
 import org.damascus.useCase.suggest.GetKetoMealUseCase
 import org.damascus.useCase.suggest.GetMealGameUtilsUseCase
 import org.koin.dsl.module
