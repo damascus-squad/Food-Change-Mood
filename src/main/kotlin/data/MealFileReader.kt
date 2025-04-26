@@ -4,27 +4,38 @@ import org.damascus.utils.CSV_FILE_PATH
 import java.io.File
 import java.io.IOException
 
-class MealFileReader {
+class MealFileReader(private val filePath: String = CSV_FILE_PATH) {
+
     fun readLinesFromFile(): List<String> {
         val lines = mutableListOf<String>()
-        val reader =getCsvFile().bufferedReader()
+        val file = getCsvFile()
 
-        var currentLine = StringBuilder()
-        var insideQuotes = false
+        val reader = file.bufferedReader()
 
-        reader.readLine()
+        val allLines = reader.readLines()
 
-        reader.forEachLine { line ->
-            currentLine.append(line)
+        var buffer = StringBuilder()
+        var isInQuotedBlock = false
 
-            val quoteCount = currentLine.count { it == '"' }
-            insideQuotes = quoteCount % 2 != 0
+        for (i in 1 until allLines.size) {
+            val line = allLines[i]
 
-            if (!insideQuotes) {
-                lines.add(currentLine.toString())
-                currentLine = StringBuilder()
-            } else {
-                currentLine.append("\n")
+            if (line.isBlank() && !isInQuotedBlock) continue
+
+            buffer.appendLine(line)
+
+            val quoteCount = line.count { it == '"' }
+            if (quoteCount % 2 != 0) {
+                isInQuotedBlock = !isInQuotedBlock
+            }
+
+            if (!isInQuotedBlock) {
+
+                val record = escapeSpecialCharacters(buffer.toString().trim())
+                if (record.isNotBlank()) {
+                    lines.add(record)
+                }
+                buffer = StringBuilder()
             }
         }
 
@@ -32,11 +43,19 @@ class MealFileReader {
     }
 
     private fun getCsvFile(): File {
-            val foodCsvFile = File(CSV_FILE_PATH)
+        val foodCsvFile = File(filePath)
         if (foodCsvFile.exists()) {
             return foodCsvFile
         }
         throw IOException("File Not Found")
     }
 
+    private fun escapeSpecialCharacters(input: String): String {
+        return input
+            .replace("\\t", "\t")
+            .replace("\\n", "\n")
+            .replace("\\r", "\r")
+            .replace("\\\"", "\"")
+            .replace("\"\"", "\"")
+    }
 }
